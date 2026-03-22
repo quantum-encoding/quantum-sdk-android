@@ -35,3 +35,16 @@ data class PostProcessOptions(
     @SerialName("operation_type") val operationType: String,
     val fps: Int? = null,
 )
+
+@kotlinx.serialization.Serializable
+data class RetextureRequest(
+    @kotlinx.serialization.SerialName("input_task_id") val inputTaskId: String? = null,
+    @kotlinx.serialization.SerialName("model_url") val modelUrl: String? = null,
+    @kotlinx.serialization.SerialName("text_style_prompt") val textStylePrompt: String? = null,
+    @kotlinx.serialization.SerialName("image_style_url") val imageStyleUrl: String? = null,
+    @kotlinx.serialization.SerialName("ai_model") val aiModel: String? = null,
+    @kotlinx.serialization.SerialName("enable_original_uv") val enableOriginalUv: Boolean? = null,
+    @kotlinx.serialization.SerialName("enable_pbr") val enablePbr: Boolean? = null,
+    @kotlinx.serialization.SerialName("remove_lighting") val removeLighting: Boolean? = null,
+    @kotlinx.serialization.SerialName("target_formats") val targetFormats: List<String>? = null,
+)

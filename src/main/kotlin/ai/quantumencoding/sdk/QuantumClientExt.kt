@@ -267,3 +267,11 @@ suspend fun QuantumClient.animate(request: ai.quantumencoding.sdk.models.Animate
     val job = createJob(ai.quantumencoding.sdk.models.JobCreateRequest(type = "3d/animate", params = params))
     return pollJob(job.jobId, intervalMs = 5000, maxAttempts = 120)
 }
+
+suspend fun QuantumClient.retexture(request: ai.quantumencoding.sdk.models.RetextureRequest): ai.quantumencoding.sdk.models.JobStatusResponse {
+    val params = kotlinx.serialization.json.Json.encodeToJsonElement(
+        ai.quantumencoding.sdk.models.RetextureRequest.serializer(), request
+    ).let { (it as kotlinx.serialization.json.JsonObject).toMap() }
+    val job = createJob(ai.quantumencoding.sdk.models.JobCreateRequest(type = "3d/retexture", params = params))
+    return pollJob(job.jobId, intervalMs = 5000, maxAttempts = 120)
+}
