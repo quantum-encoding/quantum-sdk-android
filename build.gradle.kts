@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.cosmicduck.sdk"
+    namespace = "ai.quantumencoding.sdk"
     compileSdk = 35
 
     defaultConfig {
@@ -55,7 +55,7 @@ dependencies {
 publishing {
     publications {
         register<MavenPublication>("release") {
-            groupId = "dev.cosmicduck"
+            groupId = "ai.quantumencoding"
             artifactId = "quantum-sdk"
             version = "0.2.0"
 
@@ -65,8 +65,8 @@ publishing {
 
             pom {
                 name.set("Quantum SDK")
-                description.set("Cosmic Duck SDK for Android/Kotlin — 100+ AI endpoints across 10 providers")
-                url.set("https://cosmicduck.dev/developers")
+                description.set("Quantum Encoding AI SDK for Android/Kotlin — 100+ AI endpoints across 10 providers")
+                url.set("https://quantumencoding.ai/developers")
 
                 licenses {
                     license {
@@ -94,18 +94,22 @@ publishing {
 
     repositories {
         maven {
-            name = "sonatype"
-            val releasesUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            val snapshotsUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsUrl else releasesUrl
+            name = "centralPortal"
+            url = uri("https://central.sonatype.com/api/v1/publisher/deployments/download/")
             credentials {
                 username = System.getenv("MAVEN_CENTRAL_USERNAME") ?: ""
                 password = System.getenv("MAVEN_CENTRAL_PASSWORD") ?: ""
             }
         }
+        // Local staging directory for manual bundle upload
+        maven {
+            name = "staging"
+            url = uri(layout.buildDirectory.dir("staging-deploy"))
+        }
     }
 }
 
 signing {
+    useGpgCmd()
     sign(publishing.publications["release"])
 }
