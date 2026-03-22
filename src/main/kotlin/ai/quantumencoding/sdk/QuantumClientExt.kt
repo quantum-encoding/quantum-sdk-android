@@ -232,3 +232,38 @@ internal val QuantumClient.baseUrl: String
             .replace("wss://", "https://")
             .replace("ws://", "http://")
     }
+
+// -- 3D Mesh: Remesh, Rig, Animate ---
+
+/**
+ * Remesh a 3D model. Submits job and polls to completion.
+ */
+suspend fun QuantumClient.remesh(request: ai.quantumencoding.sdk.models.RemeshRequest): ai.quantumencoding.sdk.models.JobStatusResponse {
+    val params = kotlinx.serialization.json.Json.encodeToJsonElement(
+        ai.quantumencoding.sdk.models.RemeshRequest.serializer(), request
+    ).let { (it as kotlinx.serialization.json.JsonObject).toMap() }
+    val job = createJob(ai.quantumencoding.sdk.models.JobCreateRequest(type = "3d/remesh", params = params))
+    return pollJob(job.jobId, intervalMs = 5000, maxAttempts = 120)
+}
+
+/**
+ * Rig a humanoid 3D model. Returns rigged character + basic walk/run animations.
+ */
+suspend fun QuantumClient.rig(request: ai.quantumencoding.sdk.models.RigRequest): ai.quantumencoding.sdk.models.JobStatusResponse {
+    val params = kotlinx.serialization.json.Json.encodeToJsonElement(
+        ai.quantumencoding.sdk.models.RigRequest.serializer(), request
+    ).let { (it as kotlinx.serialization.json.JsonObject).toMap() }
+    val job = createJob(ai.quantumencoding.sdk.models.JobCreateRequest(type = "3d/rig", params = params))
+    return pollJob(job.jobId, intervalMs = 5000, maxAttempts = 120)
+}
+
+/**
+ * Apply an animation to a rigged character.
+ */
+suspend fun QuantumClient.animate(request: ai.quantumencoding.sdk.models.AnimateRequest): ai.quantumencoding.sdk.models.JobStatusResponse {
+    val params = kotlinx.serialization.json.Json.encodeToJsonElement(
+        ai.quantumencoding.sdk.models.AnimateRequest.serializer(), request
+    ).let { (it as kotlinx.serialization.json.JsonObject).toMap() }
+    val job = createJob(ai.quantumencoding.sdk.models.JobCreateRequest(type = "3d/animate", params = params))
+    return pollJob(job.jobId, intervalMs = 5000, maxAttempts = 120)
+}
