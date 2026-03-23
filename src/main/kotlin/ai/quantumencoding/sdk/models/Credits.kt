@@ -26,10 +26,6 @@ data class CreditPacksResponse(
 
 /**
  * Request body for purchasing a credit pack.
- *
- * @property packId Credit pack ID to purchase.
- * @property successUrl Redirect URL on successful payment.
- * @property cancelUrl Redirect URL on cancelled payment.
  */
 @Serializable
 data class CreditPurchaseRequest(
@@ -61,8 +57,9 @@ data class CreditBalanceResponse(
 @Serializable
 data class CreditTier(
     val name: String? = null,
-    @SerialName("min_balance") val minBalance: Long? = null,
-    @SerialName("discount_percent") val discountPercent: Double? = null,
+    @SerialName("min_balance") val minBalance: Long = 0,
+    @SerialName("discount_percent") val discountPercent: Double = 0.0,
+    val extra: JsonElement? = null,
 )
 
 /**

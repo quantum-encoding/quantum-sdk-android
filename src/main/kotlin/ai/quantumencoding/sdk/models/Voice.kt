@@ -6,13 +6,16 @@ import kotlinx.serialization.Serializable
 // ── Voice Management ─────────────────────────────────────────────────
 
 /**
- * Information about a voice.
+ * A voice available for TTS.
  */
 @Serializable
-data class VoiceInfo(
+data class Voice(
     @SerialName("voice_id") val voiceId: String = "",
     val name: String = "",
-    val provider: String = "",
+    val provider: String? = null,
+    val languages: List<String>? = null,
+    val gender: String? = null,
+    @SerialName("is_cloned") val isCloned: Boolean? = null,
     @SerialName("preview_url") val previewUrl: String? = null,
 )
 
@@ -21,30 +24,26 @@ data class VoiceInfo(
  */
 @Serializable
 data class VoicesResponse(
-    val voices: List<VoiceInfo> = emptyList(),
+    val voices: List<Voice> = emptyList(),
 )
 
 /**
- * Request body for voice cloning (ElevenLabs).
- *
- * @property name Name for the cloned voice.
- * @property audioSamples Base64-encoded audio samples.
- * @property description Optional description.
+ * A file to include in a voice clone request.
  */
-@Serializable
-data class CloneVoiceRequest(
-    val name: String,
-    @SerialName("audio_samples") val audioSamples: List<String>,
-    val description: String? = null,
+data class CloneVoiceFile(
+    val filename: String = "",
+    val data: ByteArray = ByteArray(0),
+    val mimeType: String = "",
 )
 
 /**
- * Response from voice cloning.
+ * Response from cloning a voice.
  */
 @Serializable
 data class CloneVoiceResponse(
     @SerialName("voice_id") val voiceId: String = "",
     val name: String = "",
+    val status: String? = null,
 )
 
 // ── Voice Library ────────────────────────────────────────────────────
@@ -66,7 +65,7 @@ data class SharedVoice(
     val language: String? = null,
     @SerialName("use_case") val useCase: String? = null,
     val rate: Double? = null,
-    @SerialName("cloned_by_count") val clonedByCount: Int? = null,
+    @SerialName("cloned_by_count") val clonedByCount: Long? = null,
     @SerialName("free_users_allowed") val freeUsersAllowed: Boolean? = null,
 )
 
@@ -76,8 +75,8 @@ data class SharedVoice(
 @Serializable
 data class SharedVoicesResponse(
     val voices: List<SharedVoice> = emptyList(),
-    @SerialName("next_cursor") val nextCursor: String? = null,
     @SerialName("has_more") val hasMore: Boolean = false,
+    @SerialName("next_cursor") val nextCursor: String? = null,
 )
 
 /**
@@ -85,25 +84,15 @@ data class SharedVoicesResponse(
  */
 data class VoiceLibraryQuery(
     val query: String? = null,
-    val pageSize: Int? = null,
+    @SerialName("page_size") val pageSize: Int? = null,
     val cursor: String? = null,
     val gender: String? = null,
     val language: String? = null,
-    val useCase: String? = null,
+    @SerialName("use_case") val useCase: String? = null,
 )
 
 /**
- * Request body for adding a shared voice from the library.
- */
-@Serializable
-data class AddVoiceFromLibraryRequest(
-    @SerialName("public_owner_id") val publicOwnerId: String,
-    @SerialName("voice_id") val voiceId: String,
-    val name: String? = null,
-)
-
-/**
- * Response from adding a shared voice.
+ * Response from adding a voice from the library.
  */
 @Serializable
 data class AddVoiceFromLibraryResponse(

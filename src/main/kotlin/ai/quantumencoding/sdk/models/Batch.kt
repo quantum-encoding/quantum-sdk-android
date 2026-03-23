@@ -8,20 +8,12 @@ import kotlinx.serialization.json.JsonElement
  * A single job in a batch submission.
  */
 @Serializable
-data class BatchJobInput(
-    val model: String,
-    val prompt: String,
+data class BatchJob(
+    val model: String = "",
+    val prompt: String = "",
     val title: String? = null,
     @SerialName("system_prompt") val systemPrompt: String? = null,
-    @SerialName("max_tokens") val maxTokens: Int? = null,
-)
-
-/**
- * Request body for submitting a batch of jobs.
- */
-@Serializable
-data class BatchSubmitRequest(
-    val jobs: List<BatchJobInput>,
+    @SerialName("max_tokens") val maxTokens: Long? = null,
 )
 
 /**

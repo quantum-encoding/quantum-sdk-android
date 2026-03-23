@@ -8,27 +8,24 @@ import kotlinx.serialization.json.JsonElement
 
 /**
  * Request body for video generation.
- *
- * @property model Model for video generation.
- * @property prompt Text prompt.
- * @property duration Duration in seconds.
- * @property resolution Resolution (e.g. "720p", "1080p").
  */
 @Serializable
 data class VideoRequest(
-    val model: String,
-    val prompt: String,
-    val duration: Int? = null,
-    val resolution: String? = null,
+    val model: String = "",
+    val prompt: String = "",
+    @SerialName("duration_seconds") val durationSeconds: Int? = null,
+    @SerialName("aspect_ratio") val aspectRatio: String? = null,
 )
 
 /**
- * A generated video result.
+ * A single generated video.
  */
 @Serializable
 data class GeneratedVideo(
-    val url: String = "",
-    @SerialName("duration_seconds") val durationSeconds: Double = 0.0,
+    val base64: String = "",
+    val format: String = "",
+    @SerialName("size_bytes") val sizeBytes: Long = 0,
+    val index: Int = 0,
 )
 
 /**
@@ -38,81 +35,95 @@ data class GeneratedVideo(
 data class VideoResponse(
     val videos: List<GeneratedVideo> = emptyList(),
     val model: String = "",
+    @SerialName("cost_ticks") val costTicks: Long = 0,
     @SerialName("request_id") val requestId: String = "",
+)
+
+// ── Job Response (shared by HeyGen endpoints) ───────────────────────
+
+/**
+ * Response from async video job submission.
+ */
+@Serializable
+data class JobResponse(
+    @SerialName("job_id") val jobId: String = "",
+    val status: String = "",
     @SerialName("cost_ticks") val costTicks: Long = 0,
 )
 
-// ── HeyGen Video ─────────────────────────────────────────────────────
+// ── HeyGen Studio ────────────────────────────────────────────────────
 
 /**
- * Request body for HeyGen Studio talking-head video.
- *
- * @property avatarId Avatar ID.
- * @property script Script text.
- * @property voiceId Voice ID.
- * @property clips Clips for multi-scene videos.
- */
-@Serializable
-data class VideoStudioRequest(
-    @SerialName("avatar_id") val avatarId: String,
-    val script: String,
-    @SerialName("voice_id") val voiceId: String? = null,
-    val clips: List<StudioClip>? = null,
-)
-
-/**
- * A clip in a multi-scene HeyGen Studio video.
+ * A clip in a studio video.
  */
 @Serializable
 data class StudioClip(
-    @SerialName("avatar_id") val avatarId: String,
-    val script: String,
+    @SerialName("avatar_id") val avatarId: String? = null,
     @SerialName("voice_id") val voiceId: String? = null,
-    val background: String? = null,
+    val script: String? = null,
+    val background: JsonElement? = null,
 )
 
 /**
- * Request body for HeyGen video translation.
+ * Request body for HeyGen studio video creation.
  */
 @Serializable
-data class VideoTranslateRequest(
-    @SerialName("video_url") val videoUrl: String,
-    @SerialName("target_lang") val targetLang: String,
-    @SerialName("source_lang") val sourceLang: String? = null,
+data class StudioVideoRequest(
+    val title: String? = null,
+    val clips: List<StudioClip> = emptyList(),
+    val dimension: String? = null,
+    @SerialName("aspect_ratio") val aspectRatio: String? = null,
 )
 
+// ── HeyGen Translate ─────────────────────────────────────────────────
+
 /**
- * Request body for HeyGen photo avatar creation.
+ * Request body for video translation.
+ */
+@Serializable
+data class TranslateRequest(
+    @SerialName("video_url") val videoUrl: String? = null,
+    @SerialName("video_base64") val videoBase64: String? = null,
+    @SerialName("target_language") val targetLanguage: String = "",
+    @SerialName("source_language") val sourceLanguage: String? = null,
+)
+
+// ── HeyGen Photo Avatar ──────────────────────────────────────────────
+
+/**
+ * Request body for creating a photo avatar video.
  */
 @Serializable
 data class PhotoAvatarRequest(
-    val image: String,
+    @SerialName("photo_base64") val photoBase64: String = "",
+    val script: String = "",
+    @SerialName("voice_id") val voiceId: String? = null,
+    @SerialName("aspect_ratio") val aspectRatio: String? = null,
 )
 
+// ── HeyGen Digital Twin ──────────────────────────────────────────────
+
 /**
- * Request body for HeyGen digital twin creation.
+ * Request body for digital twin video generation.
  */
 @Serializable
 data class DigitalTwinRequest(
-    val video: String,
+    @SerialName("avatar_id") val avatarId: String = "",
+    val script: String = "",
+    @SerialName("voice_id") val voiceId: String? = null,
+    @SerialName("aspect_ratio") val aspectRatio: String? = null,
 )
 
-/**
- * Response for async job submissions (HeyGen, etc.).
- */
-@Serializable
-data class AsyncJobResponse(
-    @SerialName("job_id") val jobId: String = "",
-    val status: String = "",
-)
+// ── HeyGen Avatars ───────────────────────────────────────────────────
 
 /**
  * A HeyGen avatar.
  */
 @Serializable
-data class HeyGenAvatar(
+data class Avatar(
     @SerialName("avatar_id") val avatarId: String = "",
-    @SerialName("avatar_name") val avatarName: String = "",
+    val name: String? = null,
+    val gender: String? = null,
     @SerialName("preview_url") val previewUrl: String? = null,
 )
 
@@ -121,25 +132,30 @@ data class HeyGenAvatar(
  */
 @Serializable
 data class AvatarsResponse(
-    val avatars: List<HeyGenAvatar> = emptyList(),
+    val avatars: List<Avatar> = emptyList(),
 )
 
+// ── HeyGen Templates ─────────────────────────────────────────────────
+
 /**
- * A HeyGen template.
+ * A HeyGen video template.
  */
 @Serializable
-data class HeyGenTemplate(
+data class VideoTemplate(
     @SerialName("template_id") val templateId: String = "",
-    val name: String = "",
+    val name: String? = null,
+    @SerialName("preview_url") val previewUrl: String? = null,
 )
 
 /**
- * Response from listing HeyGen templates.
+ * Response from listing HeyGen video templates.
  */
 @Serializable
-data class HeyGenTemplatesResponse(
-    val templates: List<HeyGenTemplate> = emptyList(),
+data class VideoTemplatesResponse(
+    val templates: List<VideoTemplate> = emptyList(),
 )
+
+// ── HeyGen Voices ────────────────────────────────────────────────────
 
 /**
  * A HeyGen voice.
@@ -147,8 +163,10 @@ data class HeyGenTemplatesResponse(
 @Serializable
 data class HeyGenVoice(
     @SerialName("voice_id") val voiceId: String = "",
-    val name: String = "",
+    val name: String? = null,
     val language: String? = null,
+    val gender: String? = null,
+    val extra: JsonElement? = null,
 )
 
 /**

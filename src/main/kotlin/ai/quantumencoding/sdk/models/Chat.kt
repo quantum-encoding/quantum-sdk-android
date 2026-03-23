@@ -9,14 +9,6 @@ import kotlinx.serialization.json.JsonObject
 
 /**
  * Request body for the chat completion endpoint.
- *
- * @property model Model ID that determines provider routing (e.g. "claude-sonnet-4-6").
- * @property messages Conversation history.
- * @property tools Functions the model can call.
- * @property stream Enable server-sent event streaming. Use [QuantumClient.chatStream] instead.
- * @property temperature Controls randomness (0.0-2.0).
- * @property maxTokens Limits the response length.
- * @property providerOptions Provider-specific settings (e.g. Anthropic thinking, xAI search).
  */
 @Serializable
 data class ChatRequest(
@@ -31,13 +23,6 @@ data class ChatRequest(
 
 /**
  * A single message in a chat conversation.
- *
- * Use the companion factory methods for convenience:
- * ```kotlin
- * ChatMessage.system("You are helpful")
- * ChatMessage.user("Hello!")
- * ChatMessage.assistant("Hi there!")
- * ```
  */
 @Serializable
 data class ChatMessage(
@@ -48,51 +33,35 @@ data class ChatMessage(
     @SerialName("is_error") val isError: Boolean? = null,
 ) {
     companion object {
-        /** Create a system message. */
         fun system(content: String) = ChatMessage(role = "system", content = content)
-
-        /** Create a user message. */
         fun user(content: String) = ChatMessage(role = "user", content = content)
-
-        /** Create an assistant message. */
         fun assistant(content: String) = ChatMessage(role = "assistant", content = content)
-
-        /** Create a tool result message. */
         fun toolResult(toolCallId: String, content: String, isError: Boolean = false) =
             ChatMessage(role = "tool", content = content, toolCallId = toolCallId, isError = isError)
     }
 }
 
 /**
- * A tool (function) the model can call during chat.
+ * Defines a function the model can call.
  */
 @Serializable
 data class ChatTool(
-    val type: String = "function",
-    val function: ChatFunction,
-)
-
-/**
- * Function definition within a [ChatTool].
- */
-@Serializable
-data class ChatFunction(
-    val name: String,
-    val description: String? = null,
-    val parameters: JsonObject? = null,
+    val name: String = "",
+    val description: String = "",
+    val parameters: JsonElement? = null,
 )
 
 /**
  * A content block within a chat message or response.
- * Can be text, thinking, tool_use, etc.
  */
 @Serializable
 data class ContentBlock(
-    val type: String,
+    @SerialName("type") val blockType: String = "",
     val text: String? = null,
     val id: String? = null,
     val name: String? = null,
     val input: JsonObject? = null,
+    @SerialName("thought_signature") val thoughtSignature: String? = null,
 )
 
 /**
@@ -113,22 +82,22 @@ data class ChatResponse(
     val id: String = "",
     val model: String = "",
     val content: List<ContentBlock> = emptyList(),
-    val usage: ChatUsage = ChatUsage(),
+    val usage: ChatUsage? = null,
     @SerialName("stop_reason") val stopReason: String = "",
-    @SerialName("request_id") val requestId: String = "",
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 ) {
     /** Extract concatenated text content, ignoring thinking and tool_use blocks. */
     fun text(): String =
-        content.filter { it.type == "text" }.mapNotNull { it.text }.joinToString("")
+        content.filter { it.blockType == "text" }.mapNotNull { it.text }.joinToString("")
 
     /** Extract concatenated thinking content. */
     fun thinking(): String =
-        content.filter { it.type == "thinking" }.mapNotNull { it.text }.joinToString("")
+        content.filter { it.blockType == "thinking" }.mapNotNull { it.text }.joinToString("")
 
     /** Extract all tool_use content blocks. */
     fun toolCalls(): List<ContentBlock> =
-        content.filter { it.type == "tool_use" }
+        content.filter { it.blockType == "tool_use" }
 }
 
 // ── Streaming ────────────────────────────────────────────────────────
@@ -155,9 +124,9 @@ data class StreamToolUse(
  * A parsed SSE event from a streaming chat response.
  */
 data class StreamEvent(
-    val type: String,
+    @SerialName("type") val eventType: String = "",
     val delta: StreamDelta? = null,
-    val toolUse: StreamToolUse? = null,
+    @SerialName("tool_use") val toolUse: StreamToolUse? = null,
     val usage: ChatUsage? = null,
     val error: String? = null,
     val done: Boolean = false,
@@ -169,7 +138,7 @@ data class StreamEvent(
  * Common metadata parsed from API response headers.
  */
 data class ResponseMeta(
-    val costTicks: Long = 0,
-    val requestId: String = "",
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
     val model: String = "",
 )

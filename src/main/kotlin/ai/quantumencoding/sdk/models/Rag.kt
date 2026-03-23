@@ -6,106 +6,100 @@ import kotlinx.serialization.Serializable
 // ── Vertex AI RAG ────────────────────────────────────────────────────
 
 /**
- * Request body for RAG search.
- *
- * @property query Search query.
- * @property corpus Corpus name or ID (optional).
- * @property topK Maximum number of results.
+ * Request body for Vertex AI RAG search.
  */
 @Serializable
-data class RAGSearchRequest(
-    val query: String,
+data class RagSearchRequest(
+    val query: String = "",
     val corpus: String? = null,
     @SerialName("top_k") val topK: Int? = null,
 )
 
 /**
- * A single RAG search result.
+ * A single result from RAG search.
  */
 @Serializable
-data class RAGResult(
+data class RagResult(
+    @SerialName("source_uri") val sourceUri: String = "",
+    @SerialName("source_name") val sourceName: String = "",
     val text: String = "",
     val score: Double = 0.0,
-    val source: String? = null,
+    val distance: Double = 0.0,
 )
 
 /**
  * Response from RAG search.
  */
 @Serializable
-data class RAGSearchResponse(
-    val results: List<RAGResult> = emptyList(),
-    @SerialName("request_id") val requestId: String = "",
+data class RagSearchResponse(
+    val results: List<RagResult> = emptyList(),
+    val query: String = "",
+    val corpora: List<String>? = null,
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )
 
 /**
- * A Vertex AI RAG corpus.
+ * Describes an available RAG corpus.
  */
 @Serializable
-data class RAGCorpus(
+data class RagCorpus(
     val name: String = "",
-    val displayName: String = "",
+    @SerialName("displayName") val displayName: String = "",
     val description: String = "",
     val state: String = "",
-)
-
-/**
- * Response from listing RAG corpora.
- */
-@Serializable
-internal data class RAGCorporaResponse(
-    val corpora: List<RAGCorpus> = emptyList(),
-    @SerialName("request_id") val requestId: String = "",
 )
 
 // ── SurrealDB RAG ───────────────────────────────────────────────────
 
 /**
- * Request body for SurrealDB RAG search.
+ * Request body for SurrealDB-backed RAG search.
  */
 @Serializable
-data class SurrealRAGSearchRequest(
-    val query: String,
+data class SurrealRagSearchRequest(
+    val query: String = "",
     val provider: String? = null,
     val limit: Int? = null,
 )
 
 /**
- * A single SurrealDB RAG search result.
+ * A single result from SurrealDB RAG search.
  */
 @Serializable
-data class SurrealRAGResult(
-    val id: String = "",
-    val text: String = "",
-    val score: Double = 0.0,
+data class SurrealRagResult(
     val provider: String = "",
-    val source: String? = null,
+    val title: String = "",
+    val heading: String = "",
+    @SerialName("source_file") val sourceFile: String = "",
+    val content: String = "",
+    val score: Double = 0.0,
 )
 
 /**
  * Response from SurrealDB RAG search.
  */
 @Serializable
-data class SurrealRAGSearchResponse(
-    val results: List<SurrealRAGResult> = emptyList(),
-    @SerialName("request_id") val requestId: String = "",
+data class SurrealRagSearchResponse(
+    val results: List<SurrealRagResult> = emptyList(),
+    val query: String = "",
+    val provider: String? = null,
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )
 
 /**
- * Information about a SurrealDB RAG provider.
+ * A SurrealDB RAG provider.
  */
 @Serializable
-data class SurrealRAGProviderInfo(
+data class SurrealRagProvider(
     val provider: String = "",
-    @SerialName("chunk_count") val chunkCount: Int = 0,
+    @SerialName("chunk_count") val chunkCount: Long? = null,
 )
 
 /**
  * Response from listing SurrealDB RAG providers.
  */
 @Serializable
-data class SurrealRAGProvidersResponse(
-    val providers: List<SurrealRAGProviderInfo> = emptyList(),
+data class SurrealRagProvidersResponse(
+    val providers: List<SurrealRagProvider> = emptyList(),
 )

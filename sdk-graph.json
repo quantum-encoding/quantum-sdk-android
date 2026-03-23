@@ -1,0 +1,3649 @@
+{
+  "sdks": [
+    {
+      "name": "kotlin",
+      "language": "kotlin",
+      "dir": "src",
+      "scanned_at": "2026-03-23T20:43:16.816721+01:00"
+    }
+  ],
+  "types": [
+    {
+      "sdk": "kotlin",
+      "name": "ApiError",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/QuantumError.kt",
+      "fields": [
+        {
+          "name": "code",
+          "type": "String",
+          "optional": false,
+          "json_tag": "status_code"
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "optional": false,
+          "json_tag": "message"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ApiErrorBody",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/QuantumError.kt",
+      "fields": [
+        {
+          "name": "error",
+          "type": "ApiErrorDetail?",
+          "optional": true,
+          "json_tag": "error"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ApiErrorDetail",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/QuantumError.kt",
+      "fields": [
+        {
+          "name": "message",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "message"
+        },
+        {
+          "name": "type",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "type"
+        },
+        {
+          "name": "code",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "code"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "UsageEntry",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "request_id"
+        },
+        {
+          "name": "provider",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "provider"
+        },
+        {
+          "name": "endpoint",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "endpoint"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "UsageResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "entries",
+          "type": "List\u003cUsageEntry\u003e",
+          "optional": false,
+          "json_tag": "entries"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "UsageQuery",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "limit",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "limit"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "UsageSummaryMonth",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "month",
+          "type": "String",
+          "optional": false,
+          "json_tag": "month"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "UsageSummaryResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "months",
+          "type": "List\u003cUsageSummaryMonth\u003e",
+          "optional": false,
+          "json_tag": "months"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "PricingEntry",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "provider",
+          "type": "String",
+          "optional": false,
+          "json_tag": "provider"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "PricingResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "pricing",
+          "type": "Map\u003cString",
+          "optional": false,
+          "json_tag": "pricing"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ModelInfo",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "provider",
+          "type": "String",
+          "optional": false,
+          "json_tag": "provider"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "PricingInfo",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "provider",
+          "type": "String",
+          "optional": false,
+          "json_tag": "provider"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ModelsResponseBody",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "models",
+          "type": "List\u003cModelInfo\u003e",
+          "optional": false,
+          "json_tag": "models"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "PricingResponseBody",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "pricing",
+          "type": "List\u003cPricingInfo\u003e",
+          "optional": false,
+          "json_tag": "pricing"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ContactRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "name"
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "optional": false,
+          "json_tag": "email"
+        },
+        {
+          "name": "subject",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "subject"
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "optional": false,
+          "json_tag": "message"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "StatusResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Account.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "status"
+        },
+        {
+          "name": "message",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "message"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AgentWorker",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Agent.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "name"
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "model"
+        },
+        {
+          "name": "tier",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "tier"
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "description"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AgentRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Agent.kt",
+      "fields": [
+        {
+          "name": "task",
+          "type": "String",
+          "optional": false,
+          "json_tag": "task"
+        },
+        {
+          "name": "workers",
+          "type": "List\u003cAgentWorker\u003e?",
+          "optional": true,
+          "json_tag": "conductor_model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AgentStreamEvent",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Agent.kt",
+      "fields": [
+        {
+          "name": "data",
+          "type": "JsonObject?",
+          "optional": true,
+          "json_tag": "type"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "MissionWorker",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Agent.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "model"
+        },
+        {
+          "name": "tier",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "tier"
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "description"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "MissionRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Agent.kt",
+      "fields": [
+        {
+          "name": "goal",
+          "type": "String",
+          "optional": false,
+          "json_tag": "goal"
+        },
+        {
+          "name": "strategy",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "strategy"
+        },
+        {
+          "name": "workers",
+          "type": "Map\u003cString",
+          "optional": true,
+          "json_tag": "conductor_model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "TtsRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "text",
+          "type": "String",
+          "optional": false,
+          "json_tag": "text"
+        },
+        {
+          "name": "voice",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "voice"
+        },
+        {
+          "name": "speed",
+          "type": "Double?",
+          "optional": true,
+          "json_tag": "format"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "TtsResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "format",
+          "type": "String",
+          "optional": false,
+          "json_tag": "audio_base64"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "size_bytes"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SttRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "filename",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "audio_base64"
+        },
+        {
+          "name": "language",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "language"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SttResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "text",
+          "type": "String",
+          "optional": false,
+          "json_tag": "text"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "MusicRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "prompt",
+          "type": "String",
+          "optional": false,
+          "json_tag": "prompt"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "MusicClip",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "base64",
+          "type": "String",
+          "optional": false,
+          "json_tag": "base64"
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "optional": false,
+          "json_tag": "format"
+        },
+        {
+          "name": "index",
+          "type": "Int",
+          "optional": false,
+          "json_tag": "size_bytes"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "MusicResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "audio_clips"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SoundEffectRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "prompt",
+          "type": "String",
+          "optional": false,
+          "json_tag": "prompt"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SoundEffectResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "format",
+          "type": "String",
+          "optional": false,
+          "json_tag": "audio_base64"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "size_bytes"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AudioResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "format",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "audio_base64"
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "size_bytes"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DialogueTurn",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "speaker",
+          "type": "String",
+          "optional": false,
+          "json_tag": "speaker"
+        },
+        {
+          "name": "text",
+          "type": "String",
+          "optional": false,
+          "json_tag": "text"
+        },
+        {
+          "name": "voice",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "voice"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DialogueVoice",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "voice_id"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DialogueRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "text",
+          "type": "String",
+          "optional": false,
+          "json_tag": "text"
+        },
+        {
+          "name": "voices",
+          "type": "List\u003cDialogueVoice\u003e",
+          "optional": false,
+          "json_tag": "voices"
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "model"
+        },
+        {
+          "name": "seed",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "output_format"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SpeechToSpeechRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "model"
+        },
+        {
+          "name": "voice",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "audio_base64"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "RemixRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "voice",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "audio_base64"
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DubRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "filename",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "audio_base64"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AlignRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "text",
+          "type": "String",
+          "optional": false,
+          "json_tag": "audio_base64"
+        },
+        {
+          "name": "language",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "language"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AlignmentSegment",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "text",
+          "type": "String",
+          "optional": false,
+          "json_tag": "text"
+        },
+        {
+          "name": "start",
+          "type": "Double",
+          "optional": false,
+          "json_tag": "start"
+        },
+        {
+          "name": "end",
+          "type": "Double",
+          "optional": false,
+          "json_tag": "end"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AlignResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "segments",
+          "type": "List\u003cAlignmentSegment\u003e",
+          "optional": false,
+          "json_tag": "segments"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "StarfishTTSRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "text",
+          "type": "String",
+          "optional": false,
+          "json_tag": "text"
+        },
+        {
+          "name": "voice",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "voice"
+        },
+        {
+          "name": "speed",
+          "type": "Double?",
+          "optional": true,
+          "json_tag": "format"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "MusicSection",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "lyrics",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "section_type"
+        },
+        {
+          "name": "style",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "style"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ElevenMusicRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "prompt",
+          "type": "String",
+          "optional": false,
+          "json_tag": "prompt"
+        },
+        {
+          "name": "sections",
+          "type": "List\u003cMusicSection\u003e?",
+          "optional": true,
+          "json_tag": "sections"
+        },
+        {
+          "name": "language",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "duration_seconds"
+        },
+        {
+          "name": "vocals",
+          "type": "Boolean?",
+          "optional": true,
+          "json_tag": "vocals"
+        },
+        {
+          "name": "style",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "style"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ElevenMusicClip",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "base64",
+          "type": "String",
+          "optional": false,
+          "json_tag": "base64"
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "optional": false,
+          "json_tag": "format"
+        },
+        {
+          "name": "size",
+          "type": "Long",
+          "optional": false,
+          "json_tag": "size"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ElevenMusicResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "clips",
+          "type": "List\u003cElevenMusicClip\u003e",
+          "optional": false,
+          "json_tag": "clips"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "FinetuneInfo",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "finetune_id"
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "status"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ListFinetunesResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Audio.kt",
+      "fields": [
+        {
+          "name": "finetunes",
+          "type": "List\u003cFinetuneInfo\u003e",
+          "optional": false,
+          "json_tag": "finetunes"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AuthUser",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Auth.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "name",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "name"
+        },
+        {
+          "name": "email",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "email"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AuthResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Auth.kt",
+      "fields": [
+        {
+          "name": "token",
+          "type": "String",
+          "optional": false,
+          "json_tag": "token"
+        },
+        {
+          "name": "user",
+          "type": "AuthUser",
+          "optional": false,
+          "json_tag": "user"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AuthAppleRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Auth.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "id_token"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "BatchJob",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Batch.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "prompt",
+          "type": "String",
+          "optional": false,
+          "json_tag": "prompt"
+        },
+        {
+          "name": "title",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "title"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "BatchSubmitResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Batch.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "job_ids"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "BatchJobInfo",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Batch.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "job_id"
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "model"
+        },
+        {
+          "name": "title",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "title"
+        },
+        {
+          "name": "result",
+          "type": "JsonElement?",
+          "optional": true,
+          "json_tag": "completed_at"
+        },
+        {
+          "name": "error",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "error"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "BatchJobsResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Batch.kt",
+      "fields": [
+        {
+          "name": "jobs",
+          "type": "List\u003cBatchJobInfo\u003e",
+          "optional": false,
+          "json_tag": "jobs"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ChatRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Chat.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "messages",
+          "type": "List\u003cChatMessage\u003e",
+          "optional": false,
+          "json_tag": "messages"
+        },
+        {
+          "name": "tools",
+          "type": "List\u003cChatTool\u003e?",
+          "optional": true,
+          "json_tag": "tools"
+        },
+        {
+          "name": "stream",
+          "type": "Boolean?",
+          "optional": true,
+          "json_tag": "stream"
+        },
+        {
+          "name": "temperature",
+          "type": "Double?",
+          "optional": true,
+          "json_tag": "temperature"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ChatMessage",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Chat.kt",
+      "fields": [
+        {
+          "name": "role",
+          "type": "String",
+          "optional": false,
+          "json_tag": "role"
+        },
+        {
+          "name": "content",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "content"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ChatTool",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Chat.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "name"
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "optional": false,
+          "json_tag": "description"
+        },
+        {
+          "name": "parameters",
+          "type": "JsonElement?",
+          "optional": true,
+          "json_tag": "parameters"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ContentBlock",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Chat.kt",
+      "fields": [
+        {
+          "name": "text",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "type"
+        },
+        {
+          "name": "id",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "id"
+        },
+        {
+          "name": "name",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "name"
+        },
+        {
+          "name": "input",
+          "type": "JsonObject?",
+          "optional": true,
+          "json_tag": "input"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ChatResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Chat.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "content",
+          "type": "List\u003cContentBlock\u003e",
+          "optional": false,
+          "json_tag": "content"
+        },
+        {
+          "name": "usage",
+          "type": "ChatUsage?",
+          "optional": true,
+          "json_tag": "usage"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "StreamDelta",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Chat.kt",
+      "fields": [
+        {
+          "name": "text",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "text"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "StreamToolUse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Chat.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "name"
+        },
+        {
+          "name": "input",
+          "type": "JsonObject",
+          "optional": false,
+          "json_tag": "input"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "StreamEvent",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Chat.kt",
+      "fields": [
+        {
+          "name": "delta",
+          "type": "StreamDelta?",
+          "optional": true,
+          "json_tag": "type"
+        },
+        {
+          "name": "usage",
+          "type": "ChatUsage?",
+          "optional": true,
+          "json_tag": "tool_use"
+        },
+        {
+          "name": "error",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "error"
+        },
+        {
+          "name": "done",
+          "type": "Boolean",
+          "optional": false,
+          "json_tag": "done"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ResponseMeta",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Chat.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "request_id"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ComputeTemplate",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Compute.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "name",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "name"
+        },
+        {
+          "name": "gpu",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "gpu"
+        },
+        {
+          "name": "vcpus",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "vram_gb"
+        },
+        {
+          "name": "zones",
+          "type": "List\u003cString\u003e?",
+          "optional": true,
+          "json_tag": "price_per_hour_usd"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "TemplatesResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Compute.kt",
+      "fields": [
+        {
+          "name": "templates",
+          "type": "List\u003cComputeTemplate\u003e",
+          "optional": false,
+          "json_tag": "templates"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ProvisionRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Compute.kt",
+      "fields": [
+        {
+          "name": "template",
+          "type": "String",
+          "optional": false,
+          "json_tag": "template"
+        },
+        {
+          "name": "zone",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "zone"
+        },
+        {
+          "name": "spot",
+          "type": "Boolean?",
+          "optional": true,
+          "json_tag": "spot"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ProvisionResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Compute.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "instance_id"
+        },
+        {
+          "name": "template",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "template"
+        },
+        {
+          "name": "zone",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "zone"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ComputeInstance",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Compute.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "status"
+        },
+        {
+          "name": "template",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "template"
+        },
+        {
+          "name": "zone",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "zone"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "InstancesResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Compute.kt",
+      "fields": [
+        {
+          "name": "instances",
+          "type": "List\u003cComputeInstance\u003e",
+          "optional": false,
+          "json_tag": "instances"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "InstanceResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Compute.kt",
+      "fields": [
+        {
+          "name": "instance",
+          "type": "ComputeInstance",
+          "optional": false,
+          "json_tag": "instance"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DeleteResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Compute.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "status"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "BillingResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/ComputeBilling.kt",
+      "fields": [
+        {
+          "name": "entries",
+          "type": "List\u003cBillingEntry\u003e",
+          "optional": false,
+          "json_tag": "entries"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "CreditPack",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Credits.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "name",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "name"
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "credit_ticks"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "CreditPacksResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Credits.kt",
+      "fields": [
+        {
+          "name": "packs",
+          "type": "List\u003cCreditPack\u003e",
+          "optional": false,
+          "json_tag": "packs"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "CreditTier",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Credits.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "name"
+        },
+        {
+          "name": "extra",
+          "type": "JsonElement?",
+          "optional": true,
+          "json_tag": "discount_percent"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "CreditTiersResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Credits.kt",
+      "fields": [
+        {
+          "name": "tiers",
+          "type": "List\u003cCreditTier\u003e",
+          "optional": false,
+          "json_tag": "tiers"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DevProgramApplyRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Credits.kt",
+      "fields": [
+        {
+          "name": "company",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "use_case"
+        },
+        {
+          "name": "website",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "expected_usd"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DevProgramApplyResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Credits.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "status"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DocumentRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Documents.kt",
+      "fields": [
+        {
+          "name": "filename",
+          "type": "String",
+          "optional": false,
+          "json_tag": "file_base64"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DocumentResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Documents.kt",
+      "fields": [
+        {
+          "name": "content",
+          "type": "String",
+          "optional": false,
+          "json_tag": "content"
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "optional": false,
+          "json_tag": "format"
+        },
+        {
+          "name": "meta",
+          "type": "Map\u003cString",
+          "optional": true,
+          "json_tag": "meta"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ChunkRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Documents.kt",
+      "fields": [
+        {
+          "name": "filename",
+          "type": "String",
+          "optional": false,
+          "json_tag": "file_base64"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DocumentChunk",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Documents.kt",
+      "fields": [
+        {
+          "name": "index",
+          "type": "Int",
+          "optional": false,
+          "json_tag": "index"
+        },
+        {
+          "name": "text",
+          "type": "String",
+          "optional": false,
+          "json_tag": "text"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ChunkResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Documents.kt",
+      "fields": [
+        {
+          "name": "chunks",
+          "type": "List\u003cDocumentChunk\u003e",
+          "optional": false,
+          "json_tag": "chunks"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ProcessRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Documents.kt",
+      "fields": [
+        {
+          "name": "filename",
+          "type": "String",
+          "optional": false,
+          "json_tag": "file_base64"
+        },
+        {
+          "name": "prompt",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "prompt"
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ProcessResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Documents.kt",
+      "fields": [
+        {
+          "name": "content",
+          "type": "String",
+          "optional": false,
+          "json_tag": "content"
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "EmbedRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Embeddings.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "input",
+          "type": "List\u003cString\u003e",
+          "optional": false,
+          "json_tag": "input"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "EmbedResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Embeddings.kt",
+      "fields": [
+        {
+          "name": "embeddings",
+          "type": "List\u003cList\u003cDouble\u003e\u003e",
+          "optional": false,
+          "json_tag": "embeddings"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ImageRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Image.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "prompt",
+          "type": "String",
+          "optional": false,
+          "json_tag": "prompt"
+        },
+        {
+          "name": "count",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "count"
+        },
+        {
+          "name": "size",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "size"
+        },
+        {
+          "name": "quality",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "aspect_ratio"
+        },
+        {
+          "name": "style",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "output_format"
+        },
+        {
+          "name": "background",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "background"
+        },
+        {
+          "name": "topology",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "image_url"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "GeneratedImage",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Image.kt",
+      "fields": [
+        {
+          "name": "base64",
+          "type": "String",
+          "optional": false,
+          "json_tag": "base64"
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "optional": false,
+          "json_tag": "format"
+        },
+        {
+          "name": "index",
+          "type": "Int",
+          "optional": false,
+          "json_tag": "index"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ImageResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Image.kt",
+      "fields": [
+        {
+          "name": "images",
+          "type": "List\u003cGeneratedImage\u003e",
+          "optional": false,
+          "json_tag": "images"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ImageEditRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Image.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "prompt",
+          "type": "String",
+          "optional": false,
+          "json_tag": "prompt"
+        },
+        {
+          "name": "count",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "input_images"
+        },
+        {
+          "name": "size",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "size"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "JobCreateRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Jobs.kt",
+      "fields": [
+        {
+          "name": "params",
+          "type": "JsonElement?",
+          "optional": true,
+          "json_tag": "type"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "JobCreateResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Jobs.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "job_id"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "JobStatusResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Jobs.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "job_id"
+        },
+        {
+          "name": "result",
+          "type": "JsonElement?",
+          "optional": true,
+          "json_tag": "result"
+        },
+        {
+          "name": "error",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "error"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "JobSummary",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Jobs.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "job_id"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ListJobsResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Jobs.kt",
+      "fields": [
+        {
+          "name": "jobs",
+          "type": "List\u003cJobSummary\u003e",
+          "optional": false,
+          "json_tag": "jobs"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "CreateKeyRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Keys.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "name"
+        },
+        {
+          "name": "endpoints",
+          "type": "List\u003cString\u003e?",
+          "optional": true,
+          "json_tag": "endpoints"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "KeyDetails",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Keys.kt",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "name"
+        },
+        {
+          "name": "scope",
+          "type": "JsonElement?",
+          "optional": true,
+          "json_tag": "key_prefix"
+        },
+        {
+          "name": "revoked",
+          "type": "Boolean",
+          "optional": false,
+          "json_tag": "spent_ticks"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "CreateKeyResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Keys.kt",
+      "fields": [
+        {
+          "name": "key",
+          "type": "String",
+          "optional": false,
+          "json_tag": "key"
+        },
+        {
+          "name": "details",
+          "type": "KeyDetails",
+          "optional": false,
+          "json_tag": "details"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ListKeysResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Keys.kt",
+      "fields": [
+        {
+          "name": "keys",
+          "type": "List\u003cKeyDetails\u003e",
+          "optional": false,
+          "json_tag": "keys"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "RemeshRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Mesh.kt",
+      "fields": [
+        {
+          "name": "topology",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "target_formats"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ModelUrls",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Mesh.kt",
+      "fields": [
+        {
+          "name": "glb",
+          "type": "String",
+          "optional": false,
+          "json_tag": "glb"
+        },
+        {
+          "name": "fbx",
+          "type": "String",
+          "optional": false,
+          "json_tag": "fbx"
+        },
+        {
+          "name": "obj",
+          "type": "String",
+          "optional": false,
+          "json_tag": "obj"
+        },
+        {
+          "name": "usdz",
+          "type": "String",
+          "optional": false,
+          "json_tag": "usdz"
+        },
+        {
+          "name": "stl",
+          "type": "String",
+          "optional": false,
+          "json_tag": "stl"
+        },
+        {
+          "name": "blend",
+          "type": "String",
+          "optional": false,
+          "json_tag": "blend"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "RetextureRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Mesh.kt",
+      "fields": [
+        {
+          "name": "prompt",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model_url"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AnimationPostProcess",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Mesh.kt",
+      "fields": [
+        {
+          "name": "fps",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "operation_type"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "RagSearchRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Rag.kt",
+      "fields": [
+        {
+          "name": "query",
+          "type": "String",
+          "optional": false,
+          "json_tag": "query"
+        },
+        {
+          "name": "corpus",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "corpus"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "RagResult",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Rag.kt",
+      "fields": [
+        {
+          "name": "text",
+          "type": "String",
+          "optional": false,
+          "json_tag": "source_name"
+        },
+        {
+          "name": "score",
+          "type": "Double",
+          "optional": false,
+          "json_tag": "score"
+        },
+        {
+          "name": "distance",
+          "type": "Double",
+          "optional": false,
+          "json_tag": "distance"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "RagSearchResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Rag.kt",
+      "fields": [
+        {
+          "name": "results",
+          "type": "List\u003cRagResult\u003e",
+          "optional": false,
+          "json_tag": "results"
+        },
+        {
+          "name": "query",
+          "type": "String",
+          "optional": false,
+          "json_tag": "query"
+        },
+        {
+          "name": "corpora",
+          "type": "List\u003cString\u003e?",
+          "optional": true,
+          "json_tag": "corpora"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "RagCorpus",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Rag.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "name"
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "optional": false,
+          "json_tag": "displayName"
+        },
+        {
+          "name": "state",
+          "type": "String",
+          "optional": false,
+          "json_tag": "state"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SurrealRagSearchRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Rag.kt",
+      "fields": [
+        {
+          "name": "query",
+          "type": "String",
+          "optional": false,
+          "json_tag": "query"
+        },
+        {
+          "name": "provider",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "provider"
+        },
+        {
+          "name": "limit",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "limit"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SurrealRagResult",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Rag.kt",
+      "fields": [
+        {
+          "name": "provider",
+          "type": "String",
+          "optional": false,
+          "json_tag": "provider"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "optional": false,
+          "json_tag": "title"
+        },
+        {
+          "name": "heading",
+          "type": "String",
+          "optional": false,
+          "json_tag": "heading"
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "optional": false,
+          "json_tag": "source_file"
+        },
+        {
+          "name": "score",
+          "type": "Double",
+          "optional": false,
+          "json_tag": "score"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SurrealRagSearchResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Rag.kt",
+      "fields": [
+        {
+          "name": "results",
+          "type": "List\u003cSurrealRagResult\u003e",
+          "optional": false,
+          "json_tag": "results"
+        },
+        {
+          "name": "query",
+          "type": "String",
+          "optional": false,
+          "json_tag": "query"
+        },
+        {
+          "name": "provider",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "provider"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SurrealRagProvider",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Rag.kt",
+      "fields": [
+        {
+          "name": "provider",
+          "type": "String",
+          "optional": false,
+          "json_tag": "provider"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SurrealRagProvidersResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Rag.kt",
+      "fields": [
+        {
+          "name": "providers",
+          "type": "List\u003cSurrealRagProvider\u003e",
+          "optional": false,
+          "json_tag": "providers"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "RealtimeConfig",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Realtime.kt",
+      "fields": [
+        {
+          "name": "voice",
+          "type": "String",
+          "optional": false,
+          "json_tag": "voice"
+        },
+        {
+          "name": "instructions",
+          "type": "String",
+          "optional": false,
+          "json_tag": "instructions"
+        },
+        {
+          "name": "sampleRate",
+          "type": "Int",
+          "optional": false,
+          "json_tag": "sampleRate"
+        },
+        {
+          "name": "tools",
+          "type": "List\u003cJsonElement\u003e",
+          "optional": false,
+          "json_tag": "tools"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AudioDelta",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Realtime.kt",
+      "fields": [
+        {
+          "name": "delta",
+          "type": "String",
+          "optional": false,
+          "json_tag": "delta"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "TranscriptDelta",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Realtime.kt",
+      "fields": [
+        {
+          "name": "delta",
+          "type": "String",
+          "optional": false,
+          "json_tag": "delta"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "TranscriptDone",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Realtime.kt",
+      "fields": [
+        {
+          "name": "transcript",
+          "type": "String",
+          "optional": false,
+          "json_tag": "transcript"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "FunctionCall",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Realtime.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "name"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "Error",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Realtime.kt",
+      "fields": [
+        {
+          "name": "message",
+          "type": "String",
+          "optional": false,
+          "json_tag": "message"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "Unknown",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Realtime.kt",
+      "fields": [
+        {
+          "name": "raw",
+          "type": "JsonElement",
+          "optional": false,
+          "json_tag": "raw"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "RealtimeSession",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Realtime.kt",
+      "fields": [
+        {
+          "name": "url",
+          "type": "String",
+          "optional": false,
+          "json_tag": "ephemeral_token"
+        },
+        {
+          "name": "provider",
+          "type": "String",
+          "optional": false,
+          "json_tag": "session_id"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "WebSearchRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "query",
+          "type": "String",
+          "optional": false,
+          "json_tag": "query"
+        },
+        {
+          "name": "count",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "count"
+        },
+        {
+          "name": "offset",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "offset"
+        },
+        {
+          "name": "country",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "country"
+        },
+        {
+          "name": "language",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "language"
+        },
+        {
+          "name": "freshness",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "freshness"
+        },
+        {
+          "name": "safesearch",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "safesearch"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "WebResult",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "title",
+          "type": "String",
+          "optional": false,
+          "json_tag": "title"
+        },
+        {
+          "name": "url",
+          "type": "String",
+          "optional": false,
+          "json_tag": "url"
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "optional": false,
+          "json_tag": "description"
+        },
+        {
+          "name": "age",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "age"
+        },
+        {
+          "name": "favicon",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "favicon"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "NewsResult",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "title",
+          "type": "String",
+          "optional": false,
+          "json_tag": "title"
+        },
+        {
+          "name": "url",
+          "type": "String",
+          "optional": false,
+          "json_tag": "url"
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "optional": false,
+          "json_tag": "description"
+        },
+        {
+          "name": "age",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "age"
+        },
+        {
+          "name": "source",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "source"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "VideoResult",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "title",
+          "type": "String",
+          "optional": false,
+          "json_tag": "title"
+        },
+        {
+          "name": "url",
+          "type": "String",
+          "optional": false,
+          "json_tag": "url"
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "optional": false,
+          "json_tag": "description"
+        },
+        {
+          "name": "thumbnail",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "thumbnail"
+        },
+        {
+          "name": "age",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "age"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "InfoboxResult",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "title",
+          "type": "String",
+          "optional": false,
+          "json_tag": "title"
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "optional": false,
+          "json_tag": "description"
+        },
+        {
+          "name": "url",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "url"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DiscussionResult",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "title",
+          "type": "String",
+          "optional": false,
+          "json_tag": "title"
+        },
+        {
+          "name": "url",
+          "type": "String",
+          "optional": false,
+          "json_tag": "url"
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "optional": false,
+          "json_tag": "description"
+        },
+        {
+          "name": "age",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "age"
+        },
+        {
+          "name": "forum",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "forum"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "WebSearchResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "query",
+          "type": "String",
+          "optional": false,
+          "json_tag": "query"
+        },
+        {
+          "name": "web",
+          "type": "List\u003cWebResult\u003e",
+          "optional": false,
+          "json_tag": "web"
+        },
+        {
+          "name": "news",
+          "type": "List\u003cNewsResult\u003e",
+          "optional": false,
+          "json_tag": "news"
+        },
+        {
+          "name": "videos",
+          "type": "List\u003cVideoResult\u003e",
+          "optional": false,
+          "json_tag": "videos"
+        },
+        {
+          "name": "infobox",
+          "type": "List\u003cInfoboxResult\u003e",
+          "optional": false,
+          "json_tag": "infobox"
+        },
+        {
+          "name": "discussions",
+          "type": "List\u003cDiscussionResult\u003e",
+          "optional": false,
+          "json_tag": "discussions"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SearchContextRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "query",
+          "type": "String",
+          "optional": false,
+          "json_tag": "query"
+        },
+        {
+          "name": "count",
+          "type": "Int?",
+          "optional": true,
+          "json_tag": "count"
+        },
+        {
+          "name": "country",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "country"
+        },
+        {
+          "name": "language",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "language"
+        },
+        {
+          "name": "freshness",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "freshness"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SearchContextChunk",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "content",
+          "type": "String",
+          "optional": false,
+          "json_tag": "content"
+        },
+        {
+          "name": "url",
+          "type": "String",
+          "optional": false,
+          "json_tag": "url"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "optional": false,
+          "json_tag": "title"
+        },
+        {
+          "name": "score",
+          "type": "Double",
+          "optional": false,
+          "json_tag": "score"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SearchContextSource",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "url",
+          "type": "String",
+          "optional": false,
+          "json_tag": "url"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "optional": false,
+          "json_tag": "title"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SearchContextResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "chunks",
+          "type": "List\u003cSearchContextChunk\u003e",
+          "optional": false,
+          "json_tag": "chunks"
+        },
+        {
+          "name": "sources",
+          "type": "List\u003cSearchContextSource\u003e",
+          "optional": false,
+          "json_tag": "sources"
+        },
+        {
+          "name": "query",
+          "type": "String",
+          "optional": false,
+          "json_tag": "query"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SearchAnswerMessage",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "role",
+          "type": "String",
+          "optional": false,
+          "json_tag": "role"
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "optional": false,
+          "json_tag": "content"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SearchAnswerRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "messages",
+          "type": "List\u003cSearchAnswerMessage\u003e",
+          "optional": false,
+          "json_tag": "messages"
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SearchAnswerCitation",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "url",
+          "type": "String",
+          "optional": false,
+          "json_tag": "url"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "optional": false,
+          "json_tag": "title"
+        },
+        {
+          "name": "snippet",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "snippet"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SearchAnswerChoice",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "index",
+          "type": "Int",
+          "optional": false,
+          "json_tag": "index"
+        },
+        {
+          "name": "message",
+          "type": "SearchAnswerMessage",
+          "optional": false,
+          "json_tag": "message"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SearchAnswerResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Search.kt",
+      "fields": [
+        {
+          "name": "choices",
+          "type": "List\u003cSearchAnswerChoice\u003e",
+          "optional": false,
+          "json_tag": "choices"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "id",
+          "type": "String",
+          "optional": false,
+          "json_tag": "id"
+        },
+        {
+          "name": "citations",
+          "type": "List\u003cSearchAnswerCitation\u003e",
+          "optional": false,
+          "json_tag": "citations"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "ToolResult",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Session.kt",
+      "fields": [
+        {
+          "name": "content",
+          "type": "String",
+          "optional": false,
+          "json_tag": "tool_call_id"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SessionChatRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Session.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "session_id"
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "optional": false,
+          "json_tag": "message"
+        },
+        {
+          "name": "tools",
+          "type": "List\u003cChatTool\u003e?",
+          "optional": true,
+          "json_tag": "tools"
+        },
+        {
+          "name": "stream",
+          "type": "Boolean?",
+          "optional": true,
+          "json_tag": "tool_results"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SessionContext",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Session.kt",
+      "fields": [
+        {
+          "name": "compacted",
+          "type": "Boolean",
+          "optional": false,
+          "json_tag": "estimated_tokens"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SessionChatResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Session.kt",
+      "fields": [
+        {
+          "name": "response",
+          "type": "ChatResponse",
+          "optional": false,
+          "json_tag": "session_id"
+        },
+        {
+          "name": "context",
+          "type": "SessionContext",
+          "optional": false,
+          "json_tag": "context"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "VideoRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        },
+        {
+          "name": "prompt",
+          "type": "String",
+          "optional": false,
+          "json_tag": "prompt"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "GeneratedVideo",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "base64",
+          "type": "String",
+          "optional": false,
+          "json_tag": "base64"
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "optional": false,
+          "json_tag": "format"
+        },
+        {
+          "name": "index",
+          "type": "Int",
+          "optional": false,
+          "json_tag": "size_bytes"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "VideoResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "videos",
+          "type": "List\u003cGeneratedVideo\u003e",
+          "optional": false,
+          "json_tag": "videos"
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "optional": false,
+          "json_tag": "model"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "JobResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "status",
+          "type": "String",
+          "optional": false,
+          "json_tag": "job_id"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "StudioClip",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "script",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "voice_id"
+        },
+        {
+          "name": "background",
+          "type": "JsonElement?",
+          "optional": true,
+          "json_tag": "background"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "StudioVideoRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "title",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "title"
+        },
+        {
+          "name": "clips",
+          "type": "List\u003cStudioClip\u003e",
+          "optional": false,
+          "json_tag": "clips"
+        },
+        {
+          "name": "dimension",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "dimension"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "PhotoAvatarRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "script",
+          "type": "String",
+          "optional": false,
+          "json_tag": "photo_base64"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "DigitalTwinRequest",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "script",
+          "type": "String",
+          "optional": false,
+          "json_tag": "avatar_id"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "Avatar",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "avatar_id"
+        },
+        {
+          "name": "gender",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "gender"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "AvatarsResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "avatars",
+          "type": "List\u003cAvatar\u003e",
+          "optional": false,
+          "json_tag": "avatars"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "VideoTemplate",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "template_id"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "VideoTemplatesResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "templates",
+          "type": "List\u003cVideoTemplate\u003e",
+          "optional": false,
+          "json_tag": "templates"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "HeyGenVoice",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "voice_id"
+        },
+        {
+          "name": "language",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "language"
+        },
+        {
+          "name": "gender",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "gender"
+        },
+        {
+          "name": "extra",
+          "type": "JsonElement?",
+          "optional": true,
+          "json_tag": "extra"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "HeyGenVoicesResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Video.kt",
+      "fields": [
+        {
+          "name": "voices",
+          "type": "List\u003cHeyGenVoice\u003e",
+          "optional": false,
+          "json_tag": "voices"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "Voice",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Voice.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "voice_id"
+        },
+        {
+          "name": "provider",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "provider"
+        },
+        {
+          "name": "languages",
+          "type": "List\u003cString\u003e?",
+          "optional": true,
+          "json_tag": "languages"
+        },
+        {
+          "name": "gender",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "gender"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "VoicesResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Voice.kt",
+      "fields": [
+        {
+          "name": "voices",
+          "type": "List\u003cVoice\u003e",
+          "optional": false,
+          "json_tag": "voices"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "CloneVoiceFile",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Voice.kt",
+      "fields": [
+        {
+          "name": "filename",
+          "type": "String",
+          "optional": false,
+          "json_tag": "filename"
+        },
+        {
+          "name": "data",
+          "type": "ByteArray",
+          "optional": false,
+          "json_tag": "data"
+        },
+        {
+          "name": "mimeType",
+          "type": "String",
+          "optional": false,
+          "json_tag": "mimeType"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "CloneVoiceResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Voice.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "voice_id"
+        },
+        {
+          "name": "status",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "status"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SharedVoice",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Voice.kt",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String",
+          "optional": false,
+          "json_tag": "voice_id"
+        },
+        {
+          "name": "category",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "category"
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "description"
+        },
+        {
+          "name": "gender",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "preview_url"
+        },
+        {
+          "name": "age",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "age"
+        },
+        {
+          "name": "accent",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "accent"
+        },
+        {
+          "name": "language",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "language"
+        },
+        {
+          "name": "rate",
+          "type": "Double?",
+          "optional": true,
+          "json_tag": "use_case"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "SharedVoicesResponse",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Voice.kt",
+      "fields": [
+        {
+          "name": "voices",
+          "type": "List\u003cSharedVoice\u003e",
+          "optional": false,
+          "json_tag": "voices"
+        }
+      ]
+    },
+    {
+      "sdk": "kotlin",
+      "name": "VoiceLibraryQuery",
+      "kind": "data_class",
+      "file": "main/kotlin/ai/quantumencoding/sdk/models/Voice.kt",
+      "fields": [
+        {
+          "name": "query",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "query"
+        },
+        {
+          "name": "cursor",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "page_size"
+        },
+        {
+          "name": "gender",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "gender"
+        },
+        {
+          "name": "language",
+          "type": "String?",
+          "optional": true,
+          "json_tag": "language"
+        }
+      ]
+    }
+  ],
+  "updated_at": "2026-03-23T20:43:16.816726+01:00"
+}

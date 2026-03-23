@@ -7,57 +7,16 @@ import kotlinx.serialization.Serializable
 
 /**
  * Request body for web search.
- *
- * @property query Search query string (required).
- * @property count Number of results to return.
- * @property offset Pagination offset.
- * @property country Country code for localized results (e.g. "US", "GB").
- * @property language UI language code (e.g. "en", "fr").
- * @property freshness Time filter: "pd" (day), "pw" (week), "pm" (month).
- * @property safesearch Safe search level.
  */
 @Serializable
 data class WebSearchRequest(
-    val query: String,
+    val query: String = "",
     val count: Int? = null,
     val offset: Int? = null,
     val country: String? = null,
     val language: String? = null,
     val freshness: String? = null,
     val safesearch: String? = null,
-)
-
-/**
- * Full web search response containing multiple result types.
- */
-@Serializable
-data class WebSearchResponse(
-    val query: SearchQueryInfo? = null,
-    val web: WebResults? = null,
-    val news: NewsResults? = null,
-    val videos: SearchVideoResults? = null,
-    val infobox: SearchInfobox? = null,
-    val discussions: DiscussionResults? = null,
-)
-
-/**
- * Query metadata from the search engine.
- */
-@Serializable
-data class SearchQueryInfo(
-    val original: String = "",
-    val altered: String = "",
-    val language: String = "",
-    @SerialName("spellcheck_off") val spellcheckOff: Boolean = false,
-)
-
-/**
- * Container for web search results.
- */
-@Serializable
-data class WebResults(
-    val results: List<WebResult> = emptyList(),
-    @SerialName("family_friendly") val familyFriendly: Boolean = false,
 )
 
 /**
@@ -68,123 +27,77 @@ data class WebResult(
     val title: String = "",
     val url: String = "",
     val description: String = "",
-    @SerialName("extra_snippets") val extraSnippets: List<String> = emptyList(),
-    val age: String = "",
-    val language: String = "",
-    @SerialName("family_friendly") val familyFriendly: Boolean = false,
-    @SerialName("meta_url") val metaUrl: SearchMetaUrl? = null,
-    val thumbnail: SearchThumbnail? = null,
+    val age: String? = null,
+    val favicon: String? = null,
 )
 
 /**
- * URL metadata for a search result.
- */
-@Serializable
-data class SearchMetaUrl(
-    val scheme: String = "",
-    val netloc: String = "",
-    val hostname: String = "",
-    val favicon: String = "",
-    val path: String = "",
-)
-
-/**
- * Thumbnail image for a search result.
- */
-@Serializable
-data class SearchThumbnail(
-    val src: String = "",
-    val height: Int = 0,
-    val width: Int = 0,
-)
-
-/**
- * Container for news results.
- */
-@Serializable
-data class NewsResults(
-    val results: List<NewsResult> = emptyList(),
-)
-
-/**
- * A single news result.
+ * A news search result.
  */
 @Serializable
 data class NewsResult(
     val title: String = "",
     val url: String = "",
     val description: String = "",
-    val age: String = "",
-    val source: String = "",
-    val thumbnail: SearchThumbnail? = null,
+    val age: String? = null,
+    val source: String? = null,
 )
 
 /**
- * Container for video results.
+ * A video search result.
  */
 @Serializable
-data class SearchVideoResults(
-    val results: List<SearchVideoResult> = emptyList(),
-)
-
-/**
- * A single video search result.
- */
-@Serializable
-data class SearchVideoResult(
+data class VideoResult(
     val title: String = "",
     val url: String = "",
     val description: String = "",
-    val age: String = "",
-    val thumbnail: SearchThumbnail? = null,
+    val thumbnail: String? = null,
+    val age: String? = null,
 )
 
 /**
- * Knowledge panel / infobox result.
+ * An infobox (knowledge panel) result.
  */
 @Serializable
-data class SearchInfobox(
+data class InfoboxResult(
     val title: String = "",
-    val url: String = "",
     val description: String = "",
-    @SerialName("long_desc") val longDesc: String = "",
-    val type: String = "",
-    val images: List<SearchThumbnail> = emptyList(),
+    val url: String? = null,
 )
 
 /**
- * Container for discussion/forum results.
- */
-@Serializable
-data class DiscussionResults(
-    val results: List<DiscussionResult> = emptyList(),
-)
-
-/**
- * A single discussion/forum result.
+ * A discussion / forum result.
  */
 @Serializable
 data class DiscussionResult(
     val title: String = "",
     val url: String = "",
     val description: String = "",
-    val age: String = "",
+    val age: String? = null,
+    val forum: String? = null,
+)
+
+/**
+ * Response from the web search endpoint.
+ */
+@Serializable
+data class WebSearchResponse(
+    val query: String = "",
+    val web: List<WebResult> = emptyList(),
+    val news: List<NewsResult> = emptyList(),
+    val videos: List<VideoResult> = emptyList(),
+    val infobox: List<InfoboxResult> = emptyList(),
+    val discussions: List<DiscussionResult> = emptyList(),
 )
 
 // ── Search Context (LLM grounding) ─────────────────────────────────
 
 /**
- * Request body for LLM context search.
- *
- * @property query Search query string (required).
- * @property count Number of content chunks to return.
- * @property country Country code for localized results.
- * @property language UI language code.
- * @property freshness Time filter: "pd" (day), "pw" (week), "pm" (month).
+ * Request body for search context.
  */
 @Serializable
 data class SearchContextRequest(
-    val query: String,
+    val query: String = "",
     val count: Int? = null,
     val country: String? = null,
     val language: String? = null,
@@ -192,89 +105,83 @@ data class SearchContextRequest(
 )
 
 /**
- * Response containing extracted content chunks optimized for LLM context.
+ * A content chunk from search context.
  */
 @Serializable
-data class SearchContextResponse(
-    val chunks: List<ContentChunk> = emptyList(),
-    val sources: List<ContextSource> = emptyList(),
-    val query: String = "",
-)
-
-/**
- * A single content chunk extracted from a web page.
- */
-@Serializable
-data class ContentChunk(
+data class SearchContextChunk(
     val content: String = "",
     val url: String = "",
     val title: String = "",
     val score: Double = 0.0,
-    @SerialName("content_type") val contentType: String = "",
-    val index: Int = 0,
+    @SerialName("content_type") val contentType: String? = null,
 )
 
 /**
- * A source referenced in the context response.
+ * A source reference from search context.
  */
 @Serializable
-data class ContextSource(
+data class SearchContextSource(
     val url: String = "",
     val title: String = "",
-    val description: String = "",
-    val snippet: String = "",
+)
+
+/**
+ * Response from the search context endpoint.
+ */
+@Serializable
+data class SearchContextResponse(
+    val chunks: List<SearchContextChunk> = emptyList(),
+    val sources: List<SearchContextSource> = emptyList(),
+    val query: String = "",
 )
 
 // ── Search Answer (grounded AI answer) ──────────────────────────────
 
 /**
- * Request body for grounded AI answer.
- *
- * @property messages Conversation messages (required).
- * @property model Model to use for answer generation.
+ * A chat message for the search answer endpoint.
+ */
+@Serializable
+data class SearchAnswerMessage(
+    val role: String = "",
+    val content: String = "",
+)
+
+/**
+ * Request body for search answer.
  */
 @Serializable
 data class SearchAnswerRequest(
-    val messages: List<SearchChatMessage>,
+    val messages: List<SearchAnswerMessage> = emptyList(),
     val model: String? = null,
 )
 
 /**
- * A message in the search answer conversation.
+ * A citation reference in a search answer.
  */
 @Serializable
-data class SearchChatMessage(
-    val role: String,
-    val content: String,
+data class SearchAnswerCitation(
+    val url: String = "",
+    val title: String = "",
+    val snippet: String? = null,
 )
 
 /**
- * Response containing a grounded AI answer with citations.
+ * A choice in the search answer response.
+ */
+@Serializable
+data class SearchAnswerChoice(
+    val index: Int = 0,
+    val message: SearchAnswerMessage = SearchAnswerMessage(),
+    @SerialName("finish_reason") val finishReason: String? = null,
+)
+
+/**
+ * Response from the search answer endpoint.
  */
 @Serializable
 data class SearchAnswerResponse(
-    val choices: List<AnswerChoice> = emptyList(),
+    val choices: List<SearchAnswerChoice> = emptyList(),
     val model: String = "",
     val id: String = "",
-    val citations: List<SearchCitation> = emptyList(),
-)
-
-/**
- * A single answer choice.
- */
-@Serializable
-data class AnswerChoice(
-    val index: Int = 0,
-    val message: SearchChatMessage? = null,
-    @SerialName("finish_reason") val finishReason: String = "",
-)
-
-/**
- * A citation referenced in the answer.
- */
-@Serializable
-data class SearchCitation(
-    val url: String = "",
-    val title: String = "",
-    val snippet: String = "",
+    val citations: List<SearchAnswerCitation> = emptyList(),
 )

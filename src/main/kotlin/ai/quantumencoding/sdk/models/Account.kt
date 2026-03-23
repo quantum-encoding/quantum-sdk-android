@@ -27,8 +27,8 @@ data class UsageEntry(
     val endpoint: String? = null,
     @SerialName("delta_ticks") val deltaTicks: Long? = null,
     @SerialName("balance_after") val balanceAfter: Long? = null,
-    @SerialName("input_tokens") val inputTokens: Int? = null,
-    @SerialName("output_tokens") val outputTokens: Int? = null,
+    @SerialName("input_tokens") val inputTokens: Long? = null,
+    @SerialName("output_tokens") val outputTokens: Long? = null,
     @SerialName("created_at") val createdAt: String? = null,
 )
 
@@ -47,7 +47,7 @@ data class UsageResponse(
  */
 data class UsageQuery(
     val limit: Int? = null,
-    val startAfter: String? = null,
+    @SerialName("start_after") val startAfter: String? = null,
 )
 
 /**
@@ -56,12 +56,12 @@ data class UsageQuery(
 @Serializable
 data class UsageSummaryMonth(
     val month: String = "",
-    @SerialName("total_requests") val totalRequests: Int = 0,
+    @SerialName("total_requests") val totalRequests: Long = 0,
     @SerialName("total_input_tokens") val totalInputTokens: Long = 0,
     @SerialName("total_output_tokens") val totalOutputTokens: Long = 0,
     @SerialName("total_cost_usd") val totalCostUsd: Double = 0.0,
     @SerialName("total_margin_usd") val totalMarginUsd: Double = 0.0,
-    @SerialName("by_provider") val byProvider: List<JsonElement>? = null,
+    @SerialName("by_provider") val byProvider: List<JsonElement> = emptyList(),
 )
 
 /**
@@ -77,19 +77,19 @@ data class UsageSummaryResponse(
  */
 @Serializable
 data class PricingEntry(
-    @SerialName("Provider") val provider: String = "",
-    @SerialName("Model") val model: String = "",
-    @SerialName("DisplayName") val displayName: String = "",
-    @SerialName("InputPerMillion") val inputPerMillion: Double = 0.0,
-    @SerialName("OutputPerMillion") val outputPerMillion: Double = 0.0,
-    @SerialName("CachedPerMillion") val cachedPerMillion: Double? = null,
+    val provider: String = "",
+    val model: String = "",
+    @SerialName("display_name") val displayName: String = "",
+    @SerialName("input_per_million") val inputPerMillion: Double = 0.0,
+    @SerialName("output_per_million") val outputPerMillion: Double = 0.0,
+    @SerialName("cached_per_million") val cachedPerMillion: Double = 0.0,
 )
 
 /**
  * Response from the account pricing endpoint.
  */
 @Serializable
-data class AccountPricingResponse(
+data class PricingResponse(
     val pricing: Map<String, PricingEntry> = emptyMap(),
 )
 
@@ -144,6 +144,7 @@ internal data class PricingResponseBody(
 data class ContactRequest(
     val name: String,
     val email: String,
+    val subject: String? = null,
     val message: String,
 )
 
@@ -155,4 +156,5 @@ data class ContactRequest(
 @Serializable
 data class StatusResponse(
     val status: String = "",
+    val message: String? = null,
 )

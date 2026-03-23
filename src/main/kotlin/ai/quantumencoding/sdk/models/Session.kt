@@ -5,26 +5,34 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 /**
- * Request body for the session-based chat endpoint.
- * The server manages conversation history automatically.
- *
- * @property sessionId Session ID. Omit to create a new session.
- * @property model Model to use for generation.
- * @property message The user message.
- * @property tools Tools the model can call.
- * @property toolResults Tool results from previous calls.
- * @property stream Enable streaming.
- * @property systemPrompt System prompt.
- * @property contextConfig Context management configuration.
- * @property providerOptions Provider-specific settings.
+ * Configuration for session context management.
+ */
+@Serializable
+data class ContextConfig(
+    @SerialName("max_tokens") val maxTokens: Long? = null,
+    @SerialName("auto_compact") val autoCompact: Boolean? = null,
+)
+
+/**
+ * A tool result to feed back into the session.
+ */
+@Serializable
+data class ToolResult(
+    @SerialName("tool_call_id") val toolCallId: String = "",
+    val content: String = "",
+    @SerialName("is_error") val isError: Boolean? = null,
+)
+
+/**
+ * Request body for session-based chat.
  */
 @Serializable
 data class SessionChatRequest(
     @SerialName("session_id") val sessionId: String? = null,
     val model: String? = null,
-    val message: String,
+    val message: String = "",
     val tools: List<ChatTool>? = null,
-    @SerialName("tool_results") val toolResults: List<SessionToolResult>? = null,
+    @SerialName("tool_results") val toolResults: List<ToolResult>? = null,
     val stream: Boolean? = null,
     @SerialName("system_prompt") val systemPrompt: String? = null,
     @SerialName("context_config") val contextConfig: ContextConfig? = null,
@@ -32,41 +40,22 @@ data class SessionChatRequest(
 )
 
 /**
- * A tool result to return to the model in a session conversation.
+ * Context metadata returned with session responses.
  */
 @Serializable
-data class SessionToolResult(
-    @SerialName("tool_call_id") val toolCallId: String,
-    val content: String,
-    @SerialName("is_error") val isError: Boolean? = null,
-)
-
-/**
- * Context management configuration for session chat.
- */
-@Serializable
-data class ContextConfig(
-    @SerialName("max_tokens") val maxTokens: Int? = null,
-    @SerialName("auto_compact") val autoCompact: Boolean? = null,
-)
-
-/**
- * Metadata about the session context state.
- */
-@Serializable
-data class ContextMetadata(
-    @SerialName("turn_count") val turnCount: Int = 0,
-    @SerialName("estimated_tokens") val estimatedTokens: Int = 0,
+data class SessionContext(
+    @SerialName("turn_count") val turnCount: Long = 0,
+    @SerialName("estimated_tokens") val estimatedTokens: Long = 0,
     val compacted: Boolean = false,
     @SerialName("compaction_note") val compactionNote: String? = null,
 )
 
 /**
- * Response from the session-based chat endpoint.
+ * Response from session-based chat.
  */
 @Serializable
 data class SessionChatResponse(
     @SerialName("session_id") val sessionId: String = "",
     val response: ChatResponse = ChatResponse(),
-    val context: ContextMetadata = ContextMetadata(),
+    val context: SessionContext = SessionContext(),
 )

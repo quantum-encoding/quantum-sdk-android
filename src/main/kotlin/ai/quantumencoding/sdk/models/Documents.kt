@@ -2,19 +2,16 @@ package ai.quantumencoding.sdk.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 /**
  * Request body for document extraction.
- *
- * @property content Document content (base64 or URL).
- * @property type Content type (e.g. "pdf", "image", "url").
- * @property model Model for extraction.
  */
 @Serializable
 data class DocumentRequest(
-    val content: String,
-    val type: String? = null,
-    val model: String? = null,
+    @SerialName("file_base64") val fileBase64: String = "",
+    val filename: String = "",
+    @SerialName("output_format") val outputFormat: String? = null,
 )
 
 /**
@@ -22,55 +19,53 @@ data class DocumentRequest(
  */
 @Serializable
 data class DocumentResponse(
-    val text: String = "",
-    val pages: Int? = null,
-    @SerialName("request_id") val requestId: String = "",
+    val content: String = "",
+    val format: String = "",
+    val meta: Map<String, JsonElement>? = null,
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )
 
 /**
  * Request body for document chunking.
- *
- * @property text Text to chunk.
- * @property chunkSize Target chunk size in tokens.
  */
 @Serializable
-data class ChunkDocumentRequest(
-    val text: String,
-    @SerialName("chunk_size") val chunkSize: Int? = null,
+data class ChunkRequest(
+    @SerialName("file_base64") val fileBase64: String = "",
+    val filename: String = "",
+    @SerialName("max_chunk_tokens") val maxChunkTokens: Int? = null,
+    @SerialName("overlap_tokens") val overlapTokens: Int? = null,
 )
 
 /**
- * A chunk of a document.
+ * A single document chunk.
  */
 @Serializable
 data class DocumentChunk(
-    val text: String = "",
     val index: Int = 0,
-    val tokens: Int = 0,
+    val text: String = "",
+    @SerialName("token_count") val tokenCount: Int? = null,
 )
 
 /**
  * Response from document chunking.
  */
 @Serializable
-data class ChunkDocumentResponse(
+data class ChunkResponse(
     val chunks: List<DocumentChunk> = emptyList(),
-    @SerialName("request_id") val requestId: String = "",
+    @SerialName("total_chunks") val totalChunks: Int? = null,
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )
 
 /**
- * Request body for document processing.
- *
- * @property text Text to process.
- * @property instructions Processing instructions.
- * @property model Model for processing.
+ * Request body for document processing (combined extraction + analysis).
  */
 @Serializable
-data class ProcessDocumentRequest(
-    val text: String,
-    val instructions: String? = null,
+data class ProcessRequest(
+    @SerialName("file_base64") val fileBase64: String = "",
+    val filename: String = "",
+    val prompt: String? = null,
     val model: String? = null,
 )
 
@@ -78,8 +73,9 @@ data class ProcessDocumentRequest(
  * Response from document processing.
  */
 @Serializable
-data class ProcessDocumentResponse(
-    val result: String = "",
-    @SerialName("request_id") val requestId: String = "",
+data class ProcessResponse(
+    val content: String = "",
+    val model: String? = null,
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )

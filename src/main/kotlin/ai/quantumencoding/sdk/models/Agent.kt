@@ -2,88 +2,72 @@ package ai.quantumencoding.sdk.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+
+// ── Agent ──────────────────────────────────────────────────────────
+
+/**
+ * Describes a worker agent in a multi-agent run.
+ */
+@Serializable
+data class AgentWorker(
+    val name: String = "",
+    val model: String? = null,
+    val tier: String? = null,
+    val description: String? = null,
+)
 
 /**
  * Request body for the agent orchestration endpoint.
- *
- * @property task The task or goal for the agent to accomplish.
- * @property conductorModel Model for the conductor (default: server picks).
- * @property workers Worker configurations.
- * @property maxSteps Maximum number of orchestration steps.
- * @property systemPrompt System prompt for the conductor.
  */
 @Serializable
 data class AgentRequest(
     val task: String,
+    @SerialName("session_id") val sessionId: String? = null,
     @SerialName("conductor_model") val conductorModel: String? = null,
-    val workers: List<AgentWorkerConfig>? = null,
+    val workers: List<AgentWorker>? = null,
     @SerialName("max_steps") val maxSteps: Int? = null,
     @SerialName("system_prompt") val systemPrompt: String? = null,
 )
 
 /**
- * Configuration for an agent worker.
+ * A single event from an agent or mission SSE stream.
  */
 @Serializable
-data class AgentWorkerConfig(
-    val name: String,
-    val model: String? = null,
-    val tools: List<ChatTool>? = null,
-    @SerialName("system_prompt") val systemPrompt: String? = null,
-)
-
-/**
- * A parsed SSE event from an agent orchestration stream.
- */
-data class AgentEvent(
-    val type: String,
-    val done: Boolean = false,
-    val worker: String? = null,
-    val content: String? = null,
-    val toolUse: StreamToolUse? = null,
-    val usage: ChatUsage? = null,
-    val error: String? = null,
+data class AgentStreamEvent(
+    @SerialName("type") val eventType: String = "",
+    val data: JsonObject? = null,
 )
 
 // ── Mission ──────────────────────────────────────────────────────────
 
 /**
+ * Describes a named worker for a mission.
+ */
+@Serializable
+data class MissionWorker(
+    val model: String? = null,
+    val tier: String? = null,
+    val description: String? = null,
+)
+
+/**
  * Request body for the mission orchestration endpoint.
- *
- * @property goal The goal for the mission.
- * @property conductorModel Model for the conductor.
- * @property workers Worker configurations.
- * @property maxSteps Maximum orchestration steps.
  */
 @Serializable
 data class MissionRequest(
     val goal: String,
+    val strategy: String? = null,
     @SerialName("conductor_model") val conductorModel: String? = null,
-    val workers: List<MissionWorkerConfig>? = null,
+    val workers: Map<String, MissionWorker>? = null,
     @SerialName("max_steps") val maxSteps: Int? = null,
-)
-
-/**
- * Configuration for a mission worker.
- */
-@Serializable
-data class MissionWorkerConfig(
-    val name: String,
-    val model: String? = null,
-    val tools: List<ChatTool>? = null,
     @SerialName("system_prompt") val systemPrompt: String? = null,
-)
-
-/**
- * A parsed SSE event from a mission orchestration stream.
- */
-data class MissionEvent(
-    val type: String,
-    val done: Boolean = false,
-    val worker: String? = null,
-    val content: String? = null,
-    val toolUse: StreamToolUse? = null,
-    val usage: ChatUsage? = null,
-    val error: String? = null,
+    @SerialName("session_id") val sessionId: String? = null,
+    @SerialName("auto_plan") val autoPlan: Boolean? = null,
+    @SerialName("context_config") val contextConfig: ContextConfig? = null,
+    @SerialName("worker_model") val workerModel: String? = null,
+    @SerialName("deployment_id") val deploymentId: String? = null,
+    @SerialName("build_command") val buildCommand: String? = null,
+    @SerialName("workspace_path") val workspacePath: String? = null,
 )

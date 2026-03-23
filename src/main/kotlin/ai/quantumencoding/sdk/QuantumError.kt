@@ -1,5 +1,6 @@
 package ai.quantumencoding.sdk
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
@@ -45,6 +46,17 @@ class QuantumNetworkException(
 class QuantumStreamException(
     override val message: String,
 ) : Exception(message)
+
+/**
+ * Structured API error with status code and message.
+ */
+@Serializable
+data class ApiError(
+    @SerialName("status_code") val statusCode: Int = 0,
+    val code: String = "",
+    val message: String = "",
+    @SerialName("request_id") val requestId: String = "",
+)
 
 /** Error response body shape returned by the API. */
 @Serializable

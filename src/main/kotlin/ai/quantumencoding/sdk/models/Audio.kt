@@ -2,24 +2,19 @@ package ai.quantumencoding.sdk.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 // ── TTS ──────────────────────────────────────────────────────────────
 
 /**
  * Request body for text-to-speech.
- *
- * @property text Text to speak.
- * @property model Model for TTS.
- * @property voice Voice ID.
- * @property format Output format (e.g. "mp3", "wav").
- * @property speed Speaking speed.
  */
 @Serializable
-data class TTSRequest(
-    val text: String,
-    val model: String? = null,
+data class TtsRequest(
+    val model: String = "",
+    val text: String = "",
     val voice: String? = null,
-    val format: String? = null,
+    @SerialName("format") val outputFormat: String? = null,
     val speed: Double? = null,
 )
 
@@ -27,29 +22,25 @@ data class TTSRequest(
  * Response from text-to-speech.
  */
 @Serializable
-data class TTSResponse(
-    @SerialName("audio_url") val audioUrl: String = "",
+data class TtsResponse(
+    @SerialName("audio_base64") val audioBase64: String = "",
     val format: String = "",
-    @SerialName("duration_seconds") val durationSeconds: Double = 0.0,
-    @SerialName("request_id") val requestId: String = "",
+    @SerialName("size_bytes") val sizeBytes: Long = 0,
+    val model: String = "",
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )
 
 // ── STT ──────────────────────────────────────────────────────────────
 
 /**
  * Request body for speech-to-text.
- *
- * @property audio Base64-encoded audio data.
- * @property model Model for STT.
- * @property format Audio format (e.g. "wav", "mp3").
- * @property language BCP-47 language code.
  */
 @Serializable
-data class STTRequest(
-    val audio: String,
-    val model: String? = null,
-    val format: String? = null,
+data class SttRequest(
+    val model: String = "",
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val filename: String? = null,
     val language: String? = null,
 )
 
@@ -57,28 +48,23 @@ data class STTRequest(
  * Response from speech-to-text.
  */
 @Serializable
-data class STTResponse(
+data class SttResponse(
     val text: String = "",
-    val language: String = "",
-    @SerialName("duration_seconds") val durationSeconds: Double = 0.0,
-    @SerialName("request_id") val requestId: String = "",
+    val model: String = "",
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )
 
 // ── Music ────────────────────────────────────────────────────────────
 
 /**
  * Request body for music generation.
- *
- * @property prompt Text prompt describing the music.
- * @property duration Duration in seconds.
- * @property model Model to use for music generation.
  */
 @Serializable
 data class MusicRequest(
-    val prompt: String,
-    val duration: Int? = null,
-    val model: String? = null,
+    val model: String = "",
+    val prompt: String = "",
+    @SerialName("duration_seconds") val durationSeconds: Int? = null,
 )
 
 /**
@@ -86,10 +72,10 @@ data class MusicRequest(
  */
 @Serializable
 data class MusicClip(
-    @SerialName("audio_url") val audioUrl: String = "",
-    val title: String? = null,
-    val tags: String? = null,
-    @SerialName("duration_seconds") val durationSeconds: Double = 0.0,
+    val base64: String = "",
+    val format: String = "",
+    @SerialName("size_bytes") val sizeBytes: Long = 0,
+    val index: Int = 0,
 )
 
 /**
@@ -97,9 +83,10 @@ data class MusicClip(
  */
 @Serializable
 data class MusicResponse(
-    val clips: List<MusicClip> = emptyList(),
-    @SerialName("request_id") val requestId: String = "",
+    @SerialName("audio_clips") val audioClips: List<MusicClip> = emptyList(),
+    val model: String = "",
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )
 
 // ── Sound Effects ────────────────────────────────────────────────────
@@ -109,9 +96,8 @@ data class MusicResponse(
  */
 @Serializable
 data class SoundEffectRequest(
-    val text: String,
+    val prompt: String = "",
     @SerialName("duration_seconds") val durationSeconds: Double? = null,
-    @SerialName("prompt_influence") val promptInfluence: Double? = null,
 )
 
 /**
@@ -119,235 +105,205 @@ data class SoundEffectRequest(
  */
 @Serializable
 data class SoundEffectResponse(
-    @SerialName("audio_url") val audioUrl: String = "",
-    @SerialName("request_id") val requestId: String = "",
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val format: String = "",
+    @SerialName("size_bytes") val sizeBytes: Long = 0,
+    val model: String = "",
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
+)
+
+// ── AudioResponse (generic) ─────────────────────────────────────────
+
+/**
+ * Generic audio response used by multiple advanced audio endpoints.
+ */
+@Serializable
+data class AudioResponse(
+    @SerialName("audio_base64") val audioBase64: String? = null,
+    val format: String? = null,
+    @SerialName("size_bytes") val sizeBytes: Long? = null,
+    val model: String? = null,
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )
 
 // ── Dialogue ─────────────────────────────────────────────────────────
 
 /**
- * Request body for multi-speaker dialogue generation (ElevenLabs).
- *
- * @property script Script with speaker names and lines.
- * @property voices Voice mapping (speaker name to voice ID).
- * @property model Model for dialogue generation.
+ * A single dialogue turn.
  */
 @Serializable
-data class DialogueRequest(
-    val script: String,
-    val voices: Map<String, String>,
-    val model: String? = null,
+data class DialogueTurn(
+    val speaker: String = "",
+    val text: String = "",
+    val voice: String? = null,
 )
 
 /**
- * Response from dialogue generation.
+ * Voice mapping for dialogue.
  */
 @Serializable
-data class DialogueResponse(
-    @SerialName("audio_url") val audioUrl: String = "",
-    @SerialName("duration_seconds") val durationSeconds: Double = 0.0,
-    @SerialName("request_id") val requestId: String = "",
-    @SerialName("cost_ticks") val costTicks: Long = 0,
+data class DialogueVoice(
+    @SerialName("voice_id") val voiceId: String = "",
+    val name: String = "",
+)
+
+/**
+ * Request body for multi-speaker dialogue generation.
+ */
+@Serializable
+data class DialogueRequest(
+    val text: String = "",
+    val voices: List<DialogueVoice> = emptyList(),
+    val model: String? = null,
+    @SerialName("output_format") val outputFormat: String? = null,
+    val seed: Int? = null,
 )
 
 // ── Speech-to-Speech ─────────────────────────────────────────────────
 
 /**
- * Request body for voice conversion (ElevenLabs).
- *
- * @property audio Base64-encoded source audio.
- * @property voiceId Target voice ID.
- * @property model Model for voice conversion.
+ * Request body for speech-to-speech conversion.
  */
 @Serializable
 data class SpeechToSpeechRequest(
-    val audio: String,
-    @SerialName("voice_id") val voiceId: String,
     val model: String? = null,
-)
-
-/**
- * Response from voice conversion.
- */
-@Serializable
-data class SpeechToSpeechResponse(
-    @SerialName("audio_url") val audioUrl: String = "",
-    @SerialName("duration_seconds") val durationSeconds: Double = 0.0,
-    @SerialName("request_id") val requestId: String = "",
-    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val voice: String? = null,
+    @SerialName("format") val outputFormat: String? = null,
 )
 
 // ── Voice Isolation ──────────────────────────────────────────────────
 
 /**
- * Request body for voice isolation (ElevenLabs).
+ * Request body for voice isolation.
  */
 @Serializable
-data class IsolateVoiceRequest(
-    val audio: String,
-)
-
-/**
- * Response from voice isolation.
- */
-@Serializable
-data class IsolateVoiceResponse(
-    @SerialName("audio_url") val audioUrl: String = "",
-    @SerialName("request_id") val requestId: String = "",
-    @SerialName("cost_ticks") val costTicks: Long = 0,
+data class IsolateRequest(
+    @SerialName("audio_base64") val audioBase64: String = "",
+    @SerialName("format") val outputFormat: String? = null,
 )
 
 // ── Voice Remix ──────────────────────────────────────────────────────
 
 /**
- * Request body for voice remix (ElevenLabs).
+ * Request body for voice remixing.
  */
 @Serializable
-data class RemixVoiceRequest(
-    val audio: String,
-    @SerialName("voice_id") val voiceId: String,
-)
-
-/**
- * Response from voice remix.
- */
-@Serializable
-data class RemixVoiceResponse(
-    @SerialName("audio_url") val audioUrl: String = "",
-    @SerialName("request_id") val requestId: String = "",
-    @SerialName("cost_ticks") val costTicks: Long = 0,
+data class RemixRequest(
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val voice: String? = null,
+    val model: String? = null,
+    @SerialName("format") val outputFormat: String? = null,
 )
 
 // ── Dubbing ──────────────────────────────────────────────────────────
 
 /**
- * Request body for dubbing (ElevenLabs).
+ * Request body for audio dubbing.
  */
 @Serializable
 data class DubRequest(
-    val audio: String,
-    @SerialName("target_lang") val targetLang: String,
-    @SerialName("source_lang") val sourceLang: String? = null,
-)
-
-/**
- * Response from dubbing.
- */
-@Serializable
-data class DubResponse(
-    @SerialName("audio_url") val audioUrl: String = "",
-    @SerialName("request_id") val requestId: String = "",
-    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val filename: String? = null,
+    @SerialName("target_language") val targetLanguage: String = "",
+    @SerialName("source_language") val sourceLanguage: String? = null,
 )
 
 // ── Alignment ────────────────────────────────────────────────────────
 
 /**
- * Request body for audio-text alignment (ElevenLabs).
+ * Request body for audio-text alignment.
  */
 @Serializable
 data class AlignRequest(
-    val audio: String,
-    val text: String,
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val text: String = "",
+    val language: String? = null,
 )
 
 /**
- * A word with timing information from alignment.
+ * A single alignment segment.
  */
 @Serializable
-data class AlignedWord(
-    val word: String = "",
+data class AlignmentSegment(
+    val text: String = "",
     val start: Double = 0.0,
     val end: Double = 0.0,
 )
 
 /**
- * Response from audio-text alignment.
+ * Response from audio alignment.
  */
 @Serializable
 data class AlignResponse(
-    val words: List<AlignedWord> = emptyList(),
-    @SerialName("request_id") val requestId: String = "",
+    val segments: List<AlignmentSegment> = emptyList(),
     @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
 )
 
 // ── Voice Design ─────────────────────────────────────────────────────
 
 /**
- * Request body for voice design (ElevenLabs).
- *
- * @property description Text description of the desired voice.
- * @property previewText Text to preview the voice with.
+ * Request body for voice design (generating a voice from a description).
  */
 @Serializable
 data class VoiceDesignRequest(
-    val description: String,
-    @SerialName("preview_text") val previewText: String? = null,
-)
-
-/**
- * A voice preview from voice design.
- */
-@Serializable
-data class VoicePreview(
-    @SerialName("audio_url") val audioUrl: String = "",
-    @SerialName("voice_id") val voiceId: String = "",
-)
-
-/**
- * Response from voice design.
- */
-@Serializable
-data class VoiceDesignResponse(
-    val previews: List<VoicePreview> = emptyList(),
-    @SerialName("request_id") val requestId: String = "",
-    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("voice_description") val description: String = "",
+    @SerialName("sample_text") val text: String = "",
+    @SerialName("format") val outputFormat: String? = null,
 )
 
 // ── Starfish TTS ─────────────────────────────────────────────────────
 
 /**
- * Request body for HeyGen Starfish TTS.
- *
- * @property text Text to speak.
- * @property referenceAudio Base64-encoded reference audio for voice cloning.
+ * Request body for Starfish TTS (HeyGen).
  */
 @Serializable
 data class StarfishTTSRequest(
-    val text: String,
-    @SerialName("reference_audio") val referenceAudio: String? = null,
-)
-
-/**
- * Response from Starfish TTS.
- */
-@Serializable
-data class StarfishTTSResponse(
-    @SerialName("audio_url") val audioUrl: String = "",
-    @SerialName("duration_seconds") val durationSeconds: Double = 0.0,
-    @SerialName("request_id") val requestId: String = "",
-    @SerialName("cost_ticks") val costTicks: Long = 0,
+    val text: String = "",
+    val voice: String? = null,
+    @SerialName("format") val outputFormat: String? = null,
+    val speed: Double? = null,
 )
 
 // ── Advanced Music + Finetunes ───────────────────────────────────────
 
 /**
- * Request body for advanced music generation (ElevenLabs Eleven Music).
+ * A section within an Eleven Music generation request.
  */
 @Serializable
-data class MusicAdvancedRequest(
-    val prompt: String,
-    @SerialName("duration_seconds") val durationSeconds: Int? = null,
-    val model: String? = null,
-    @SerialName("finetune_id") val finetuneId: String? = null,
+data class MusicSection(
+    @SerialName("section_type") val sectionType: String = "",
+    val lyrics: String? = null,
+    val style: String? = null,
+    @SerialName("style_exclude") val styleExclude: String? = null,
 )
 
 /**
- * A clip from advanced music generation (base64-encoded).
+ * Request body for advanced music generation (ElevenLabs Eleven Music).
  */
 @Serializable
-data class MusicAdvancedClip(
+data class ElevenMusicRequest(
+    val model: String = "",
+    val prompt: String = "",
+    val sections: List<MusicSection>? = null,
+    @SerialName("duration_seconds") val durationSeconds: Int? = null,
+    val language: String? = null,
+    val vocals: Boolean? = null,
+    val style: String? = null,
+    @SerialName("style_exclude") val styleExclude: String? = null,
+    @SerialName("finetune_id") val finetuneId: String? = null,
+    @SerialName("edit_reference_id") val editReferenceId: String? = null,
+    @SerialName("edit_instruction") val editInstruction: String? = null,
+)
+
+/**
+ * A single music clip from advanced generation.
+ */
+@Serializable
+data class ElevenMusicClip(
     val base64: String = "",
     val format: String = "",
     val size: Long = 0,
@@ -357,40 +313,28 @@ data class MusicAdvancedClip(
  * Response from advanced music generation.
  */
 @Serializable
-data class MusicAdvancedResponse(
-    val clips: List<MusicAdvancedClip> = emptyList(),
+data class ElevenMusicResponse(
+    val clips: List<ElevenMusicClip> = emptyList(),
     val model: String = "",
     @SerialName("cost_ticks") val costTicks: Long = 0,
     @SerialName("request_id") val requestId: String = "",
 )
 
 /**
- * Information about a music finetune.
+ * Info about a music finetune.
  */
 @Serializable
-data class MusicFinetuneInfo(
+data class FinetuneInfo(
     @SerialName("finetune_id") val finetuneId: String = "",
     val name: String = "",
-    val description: String? = null,
     val status: String = "",
-    @SerialName("model_id") val modelId: String? = null,
     @SerialName("created_at") val createdAt: String? = null,
 )
 
 /**
- * Response from listing music finetunes.
+ * Response from listing finetunes.
  */
 @Serializable
-data class MusicFinetuneListResponse(
-    val finetunes: List<MusicFinetuneInfo> = emptyList(),
-)
-
-/**
- * Request body for creating a music finetune.
- */
-@Serializable
-data class MusicFinetuneCreateRequest(
-    val name: String,
-    val description: String? = null,
-    val samples: List<String>,
+data class ListFinetunesResponse(
+    val finetunes: List<FinetuneInfo> = emptyList(),
 )
