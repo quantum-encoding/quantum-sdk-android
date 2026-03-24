@@ -12,6 +12,7 @@ import kotlinx.serialization.serializer
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -92,6 +93,45 @@ internal class HttpClient(
         }
 
         val response = executeAsync(requestBuilder.build())
+        val meta = extractMeta(response)
+
+        if (!response.isSuccessful) {
+            throw parseApiError(response, meta.requestId)
+        }
+
+        val responseBody = response.body?.string()
+            ?: throw QuantumNetworkException("Empty response body")
+
+        val data = json.decodeFromString<T>(responseBody)
+        return data to meta
+    }
+
+    /**
+     * Send a multipart/form-data POST request and decode the JSON response.
+     *
+     * @param path API path (e.g. "/qai/v1/rag/collections/{id}/upload").
+     * @param filename The filename for the uploaded part.
+     * @param content Raw bytes of the file to upload.
+     * @return Pair of deserialized response body and response metadata.
+     */
+    suspend inline fun <reified T> doMultipart(
+        path: String,
+        filename: String,
+        content: ByteArray,
+    ): Pair<T, ResponseMeta> {
+        val fileBody = content.toRequestBody("application/octet-stream".toMediaType())
+        val multipartBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("file", filename, fileBody)
+            .build()
+
+        val request = Request.Builder()
+            .url("$baseUrl$path")
+            .header("Authorization", "Bearer $apiKey")
+            .post(multipartBody)
+            .build()
+
+        val response = executeAsync(request)
         val meta = extractMeta(response)
 
         if (!response.isSuccessful) {

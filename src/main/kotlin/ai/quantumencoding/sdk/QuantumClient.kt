@@ -535,6 +535,91 @@ class QuantumClient(
         return data
     }
 
+    // ── xAI Collection Proxy (user-scoped) ──────────────────────────
+
+    /**
+     * List the user's collections plus shared collections.
+     */
+    suspend fun collectionsList(): List<Collection> {
+        val (data, _) = http.doJson<CollectionsListResponse>("GET", "/qai/v1/rag/collections")
+        return data.collections
+    }
+
+    /**
+     * Create a new user-owned collection.
+     *
+     * @param name Human-readable name for the collection.
+     * @return The newly created collection.
+     */
+    suspend fun collectionsCreate(name: String): Collection {
+        val (data, _) = http.doJson<Collection>("POST", "/qai/v1/rag/collections", mapOf("name" to name))
+        return data
+    }
+
+    /**
+     * Get details for a single collection (must be owned or shared).
+     *
+     * @param id Collection ID.
+     */
+    suspend fun collectionsGet(id: String): Collection {
+        val (data, _) = http.doJson<Collection>("GET", "/qai/v1/rag/collections/$id")
+        return data
+    }
+
+    /**
+     * Delete a collection (owner only).
+     *
+     * @param id Collection ID to delete.
+     */
+    suspend fun collectionsDelete(id: String) {
+        http.doJson<DeleteCollectionResponse>("DELETE", "/qai/v1/rag/collections/$id")
+    }
+
+    /**
+     * List documents in a collection.
+     *
+     * @param collectionId Collection ID to list documents for.
+     */
+    suspend fun collectionsDocuments(collectionId: String): List<CollectionDocument> {
+        val (data, _) = http.doJson<CollectionDocumentsResponse>(
+            "GET", "/qai/v1/rag/collections/$collectionId/documents"
+        )
+        return data.documents
+    }
+
+    /**
+     * Upload a file to a collection. The server handles the two-step
+     * xAI upload (files API + management API) with the master key.
+     *
+     * @param collectionId Collection ID to upload to.
+     * @param filename Name for the uploaded file.
+     * @param content Raw bytes of the file to upload.
+     */
+    suspend fun collectionsUpload(
+        collectionId: String,
+        filename: String,
+        content: ByteArray,
+    ): CollectionUploadResult {
+        val (data, _) = http.doMultipart<CollectionUploadResult>(
+            "/qai/v1/rag/collections/$collectionId/upload",
+            filename,
+            content,
+        )
+        return data
+    }
+
+    /**
+     * Search across collections (user's + shared) with hybrid/semantic/keyword mode.
+     *
+     * @param request Search request with query and collection IDs.
+     */
+    suspend fun collectionsSearch(request: CollectionSearchRequest): List<CollectionSearchResult> {
+        val (data, _) = http.doJson<CollectionSearchResponse>(
+            "POST", "/qai/v1/rag/search/collections", request
+        )
+        return data.results
+    }
+
     // ── Models ────────────────────────────────────────────────────────
 
     /**
