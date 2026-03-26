@@ -54,3 +54,14 @@ data class JobSummary(
 data class ListJobsResponse(
     val jobs: List<JobSummary> = emptyList(),
 )
+
+@Serializable
+data class JobStreamEvent(
+    val type: String = "",
+    @SerialName("job_id") val jobId: String? = null,
+    val status: String? = null,
+    val result: JsonElement? = null,
+    val error: String? = null,
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("completed_at") val completedAt: String? = null,
+)

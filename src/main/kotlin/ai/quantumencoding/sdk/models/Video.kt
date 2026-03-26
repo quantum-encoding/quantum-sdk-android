@@ -176,3 +176,6 @@ data class HeyGenVoice(
 data class HeyGenVoicesResponse(
     val voices: List<HeyGenVoice> = emptyList(),
 )
+
+typealias VideoStudioRequest = StudioVideoRequest
+typealias VideoTranslateRequest = TranslateRequest

@@ -98,3 +98,12 @@ data class VoiceLibraryQuery(
 data class AddVoiceFromLibraryResponse(
     @SerialName("voice_id") val voiceId: String = "",
 )
+
+@Serializable
+data class VoiceInfo(
+    @SerialName("voice_id") val voiceId: String = "",
+    val name: String = "",
+    val category: String = "",
+    val description: String? = null,
+    @SerialName("preview_url") val previewUrl: String? = null,
+)

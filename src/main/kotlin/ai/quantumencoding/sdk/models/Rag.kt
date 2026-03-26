@@ -103,3 +103,31 @@ data class SurrealRagProvider(
 data class SurrealRagProvidersResponse(
     val providers: List<SurrealRagProvider> = emptyList(),
 )
+
+typealias SurrealRagProviderInfo = SurrealRagProvider
+
+@Serializable
+data class CreateCollectionRequest(
+    val name: String = "",
+    val description: String? = null,
+    val provider: String? = null,
+)
+
+@Serializable
+data class RagCorporaResponse(
+    val corpora: List<RagCorpus> = emptyList(),
+)
+
+@Serializable
+data class ModelsResponse(
+    val models: List<ModelInfo> = emptyList(),
+)
+
+@Serializable
+data class ModelInfo(
+    val id: String = "",
+    val provider: String = "",
+    @SerialName("display_name") val displayName: String = "",
+    @SerialName("input_per_million") val inputPerMillion: Double = 0.0,
+    @SerialName("output_per_million") val outputPerMillion: Double = 0.0,
+)

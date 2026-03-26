@@ -338,3 +338,149 @@ data class FinetuneInfo(
 data class ListFinetunesResponse(
     val finetunes: List<FinetuneInfo> = emptyList(),
 )
+
+// ── Cross-SDK parity types ──────────────────────────────────────────
+
+typealias TextToSpeechRequest = TtsRequest
+typealias TextToSpeechResponse = TtsResponse
+typealias SpeechToTextRequest = SttRequest
+typealias SpeechToTextResponse = SttResponse
+typealias IsolateVoiceRequest = IsolateRequest
+typealias RemixVoiceRequest = RemixRequest
+
+@Serializable
+data class AlignedWord(
+    val text: String = "",
+    @SerialName("start_time") val startTime: Double = 0.0,
+    @SerialName("end_time") val endTime: Double = 0.0,
+    val confidence: Double = 0.0,
+)
+
+@Serializable
+data class DialogueResponse(
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val format: String = "",
+    @SerialName("size_bytes") val sizeBytes: Long = 0,
+    val model: String = "",
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
+)
+
+@Serializable
+data class SpeechToSpeechResponse(
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val format: String = "",
+    @SerialName("size_bytes") val sizeBytes: Long = 0,
+    val model: String = "",
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
+)
+
+@Serializable
+data class IsolateVoiceResponse(
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val format: String = "",
+    @SerialName("size_bytes") val sizeBytes: Long = 0,
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
+)
+
+@Serializable
+data class RemixVoiceResponse(
+    @SerialName("audio_base64") val audioBase64: String? = null,
+    val format: String = "",
+    @SerialName("size_bytes") val sizeBytes: Long = 0,
+    @SerialName("voice_id") val voiceId: String? = null,
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
+)
+
+@Serializable
+data class DubResponse(
+    @SerialName("dubbing_id") val dubbingId: String = "",
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val format: String = "",
+    @SerialName("target_lang") val targetLang: String = "",
+    val status: String = "",
+    @SerialName("processing_time_seconds") val processingTimeSeconds: Double = 0.0,
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
+)
+
+@Serializable
+data class VoiceDesignRequest(
+    @SerialName("voice_description") val description: String = "",
+    @SerialName("sample_text") val text: String = "",
+    @SerialName("format") val outputFormat: String? = null,
+)
+
+@Serializable
+data class VoiceDesignResponse(
+    val previews: List<VoicePreview> = emptyList(),
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
+)
+
+@Serializable
+data class VoicePreview(
+    @SerialName("generated_voice_id") val generatedVoiceId: String = "",
+    @SerialName("audio_base64") val audioBase64: String = "",
+    val format: String = "",
+)
+
+@Serializable
+data class StarfishTTSResponse(
+    @SerialName("audio_base64") val audioBase64: String? = null,
+    val url: String? = null,
+    val format: String = "",
+    @SerialName("size_bytes") val sizeBytes: Long = 0,
+    val duration: Double = 0.0,
+    val model: String = "",
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
+)
+
+@Serializable
+data class MusicAdvancedRequest(
+    val prompt: String = "",
+    @SerialName("duration_seconds") val durationSeconds: Int? = null,
+    val model: String? = null,
+    @SerialName("finetune_id") val finetuneId: String? = null,
+)
+
+@Serializable
+data class MusicAdvancedClip(
+    val base64: String = "",
+    val format: String = "",
+    val size: Long = 0,
+)
+
+@Serializable
+data class MusicAdvancedResponse(
+    val clips: List<MusicAdvancedClip> = emptyList(),
+    val model: String = "",
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("request_id") val requestId: String = "",
+)
+
+@Serializable
+data class MusicFinetuneInfo(
+    @SerialName("finetune_id") val finetuneId: String = "",
+    val name: String = "",
+    val description: String? = null,
+    val status: String = "",
+    @SerialName("model_id") val modelId: String? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+)
+
+@Serializable
+data class MusicFinetuneListResponse(
+    val finetunes: List<MusicFinetuneInfo> = emptyList(),
+)
+
+@Serializable
+data class MusicFinetuneCreateRequest(
+    val name: String = "",
+    val description: String? = null,
+    val samples: List<String> = emptyList(),
+)

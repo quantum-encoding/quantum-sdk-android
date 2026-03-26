@@ -185,3 +185,6 @@ data class SearchAnswerResponse(
     val id: String = "",
     val citations: List<SearchAnswerCitation> = emptyList(),
 )
+
+typealias Infobox = InfoboxResult
+typealias Discussion = DiscussionResult

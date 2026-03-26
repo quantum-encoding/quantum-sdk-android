@@ -79,3 +79,8 @@ data class ProcessResponse(
     @SerialName("cost_ticks") val costTicks: Long = 0,
     @SerialName("request_id") val requestId: String = "",
 )
+
+typealias ChunkDocumentRequest = ChunkRequest
+typealias ChunkDocumentResponse = ChunkResponse
+typealias ProcessDocumentRequest = ProcessRequest
+typealias ProcessDocumentResponse = ProcessResponse

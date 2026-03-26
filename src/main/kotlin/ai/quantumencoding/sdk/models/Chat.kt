@@ -142,3 +142,20 @@ data class ResponseMeta(
     @SerialName("request_id") val requestId: String = "",
     val model: String = "",
 )
+
+// ── Cross-SDK parity ────────────────────────────────────────────────
+
+@Serializable
+data class Citation(
+    val url: String = "",
+    val title: String = "",
+    val text: String = "",
+    val index: Int = 0,
+)
+
+@Serializable
+data class ChatUsage(
+    @SerialName("input_tokens") val inputTokens: Int = 0,
+    @SerialName("output_tokens") val outputTokens: Int = 0,
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+)
