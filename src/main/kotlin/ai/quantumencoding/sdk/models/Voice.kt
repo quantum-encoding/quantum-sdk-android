@@ -107,3 +107,25 @@ data class VoiceInfo(
     val description: String? = null,
     @SerialName("preview_url") val previewUrl: String? = null,
 )
+
+/**
+ * Request body for adding a shared voice from the library.
+ */
+@Serializable
+data class AddVoiceFromLibraryRequest(
+    @SerialName("public_owner_id") val publicOwnerId: String = "",
+    @SerialName("voice_id") val voiceId: String = "",
+    val name: String? = null,
+)
+
+/**
+ * Request body for instant voice cloning from audio samples (JSON path).
+ */
+@Serializable
+data class CloneVoiceRequest(
+    val name: String = "",
+    val description: String? = null,
+    @SerialName("audio_samples") val audioSamples: List<String> = emptyList(),
+)
+
+// VoiceDesignRequest is defined in Audio.kt

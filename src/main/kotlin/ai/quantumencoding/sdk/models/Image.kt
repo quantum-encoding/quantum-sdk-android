@@ -57,3 +57,8 @@ data class ImageEditRequest(
     val count: Int? = null,
     val size: String? = null,
 )
+
+/**
+ * Response from image editing (same shape as generation).
+ */
+typealias ImageEditResponse = ImageResponse

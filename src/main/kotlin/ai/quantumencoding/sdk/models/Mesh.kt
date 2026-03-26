@@ -71,3 +71,26 @@ data class AnimationPostProcess(
     @SerialName("operation_type") val operationType: String = "",
     val fps: Int? = null,
 )
+
+/**
+ * Backwards-compatible alias for [AnimationPostProcess].
+ */
+typealias PostProcess = AnimationPostProcess
+
+/**
+ * Request for 3D model generation (alias for [ImageRequest]).
+ */
+typealias Generate3DRequest = ImageRequest
+
+/**
+ * URLs for basic pre-built animations from a rigging result.
+ */
+@Serializable
+data class BasicAnimations(
+    @SerialName("walking_glb") val walkingGlb: String = "",
+    @SerialName("walking_fbx") val walkingFbx: String = "",
+    @SerialName("running_glb") val runningGlb: String = "",
+    @SerialName("running_fbx") val runningFbx: String = "",
+    @SerialName("idle_glb") val idleGlb: String = "",
+    @SerialName("idle_fbx") val idleFbx: String = "",
+)

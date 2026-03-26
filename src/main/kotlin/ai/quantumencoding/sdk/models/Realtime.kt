@@ -42,3 +42,8 @@ data class RealtimeSession(
     @SerialName("session_id") val sessionId: String = "",
     val provider: String = "",
 )
+
+/**
+ * Backwards-compatible alias for [RealtimeSession].
+ */
+typealias RealtimeSessionResponse = RealtimeSession

@@ -408,13 +408,6 @@ data class DubResponse(
 )
 
 @Serializable
-data class VoiceDesignRequest(
-    @SerialName("voice_description") val description: String = "",
-    @SerialName("sample_text") val text: String = "",
-    @SerialName("format") val outputFormat: String? = null,
-)
-
-@Serializable
 data class VoiceDesignResponse(
     val previews: List<VoicePreview> = emptyList(),
     @SerialName("cost_ticks") val costTicks: Long = 0,

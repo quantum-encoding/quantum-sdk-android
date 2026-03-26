@@ -71,3 +71,23 @@ data class MissionRequest(
     @SerialName("build_command") val buildCommand: String? = null,
     @SerialName("workspace_path") val workspacePath: String? = null,
 )
+
+/**
+ * Backwards-compatible alias for [AgentWorker].
+ */
+typealias AgentWorkerConfig = AgentWorker
+
+/**
+ * Backwards-compatible alias for [MissionWorker].
+ */
+typealias MissionWorkerConfig = MissionWorker
+
+/**
+ * A single SSE event from an agent run stream.
+ */
+typealias AgentEvent = AgentStreamEvent
+
+/**
+ * A single SSE event from a mission run stream.
+ */
+typealias MissionEvent = AgentStreamEvent

@@ -65,3 +65,40 @@ data class JobStreamEvent(
     @SerialName("cost_ticks") val costTicks: Long = 0,
     @SerialName("completed_at") val completedAt: String? = null,
 )
+
+/**
+ * Response from async job submission (HeyGen, 3D, etc.).
+ */
+@Serializable
+data class JobAcceptedResponse(
+    @SerialName("job_id") val jobId: String = "",
+    val status: String = "",
+    @SerialName("type") val jobType: String? = null,
+    @SerialName("request_id") val requestId: String? = null,
+)
+
+/**
+ * A single job entry in the detailed job list response.
+ */
+@Serializable
+data class JobListEntry(
+    @SerialName("job_id") val jobId: String = "",
+    @SerialName("type") val jobType: String? = null,
+    val status: String = "",
+    val result: JsonElement? = null,
+    val error: String? = null,
+    @SerialName("cost_ticks") val costTicks: Long = 0,
+    @SerialName("created_at") val createdAt: String? = null,
+    @SerialName("started_at") val startedAt: String? = null,
+    @SerialName("completed_at") val completedAt: String? = null,
+    @SerialName("request_id") val requestId: String? = null,
+)
+
+/**
+ * Response from listing jobs (detailed variant).
+ */
+@Serializable
+data class JobListResponse(
+    val jobs: List<JobListEntry> = emptyList(),
+    @SerialName("request_id") val requestId: String? = null,
+)

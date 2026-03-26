@@ -188,3 +188,74 @@ data class SearchAnswerResponse(
 
 typealias Infobox = InfoboxResult
 typealias Discussion = DiscussionResult
+
+// ── Search Options ──────────────────────────────────────────────────
+
+/**
+ * Options for configuring web search requests.
+ */
+@Serializable
+data class SearchOptions(
+    val count: Int? = null,
+    val offset: Int? = null,
+    val country: String? = null,
+    val language: String? = null,
+    val freshness: String? = null,
+    @SerialName("safe_search") val safeSearch: String? = null,
+)
+
+/**
+ * Options for configuring LLM context search requests.
+ */
+@Serializable
+data class ContextOptions(
+    val count: Int? = null,
+    val country: String? = null,
+    val language: String? = null,
+    val freshness: String? = null,
+)
+
+/**
+ * A message in a search-answer conversation.
+ */
+@Serializable
+data class SearchMessage(
+    val role: String = "",
+    val content: String = "",
+)
+
+// ── LLM Context ─────────────────────────────────────────────────────
+
+/**
+ * A single chunk of context from a web page (simple variant).
+ */
+@Serializable
+data class ContextChunk(
+    val content: String = "",
+    val url: String = "",
+    val title: String = "",
+    val score: Double = 0.0,
+    @SerialName("content_type") val contentType: String? = null,
+)
+
+/**
+ * LLM-optimised context response from web search.
+ */
+@Serializable
+data class LLMContextResponse(
+    val query: String = "",
+    val chunks: List<ContextChunk> = emptyList(),
+    val sources: List<String> = emptyList(),
+)
+
+/**
+ * Context metadata returned in session responses.
+ */
+@Serializable
+data class ContextMetadata(
+    @SerialName("turn_count") val turnCount: Long = 0,
+    @SerialName("estimated_tokens") val estimatedTokens: Long = 0,
+    val compacted: Boolean = false,
+    @SerialName("compaction_note") val compactionNote: String? = null,
+    @SerialName("tools_cleared") val toolsCleared: Int? = null,
+)

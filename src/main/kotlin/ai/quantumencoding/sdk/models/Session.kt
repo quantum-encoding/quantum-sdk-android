@@ -59,3 +59,13 @@ data class SessionChatResponse(
     val response: ChatResponse = ChatResponse(),
     val context: SessionContext = SessionContext(),
 )
+
+/**
+ * A tool execution result from the client (used in SessionChatRequest.toolResults).
+ */
+@Serializable
+data class SessionToolResult(
+    @SerialName("tool_call_id") val toolCallId: String = "",
+    val content: String = "",
+    @SerialName("is_error") val isError: Boolean? = null,
+)

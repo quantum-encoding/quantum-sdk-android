@@ -56,3 +56,16 @@ data class BatchJobInfo(
 data class BatchJobsResponse(
     val jobs: List<BatchJobInfo> = emptyList(),
 )
+
+/**
+ * Alias for [BatchJob] — a single input in a batch submission.
+ */
+typealias BatchJobInput = BatchJob
+
+/**
+ * Request body for batch submission (wraps a list of jobs).
+ */
+@Serializable
+data class BatchSubmitRequest(
+    val jobs: List<BatchJob> = emptyList(),
+)

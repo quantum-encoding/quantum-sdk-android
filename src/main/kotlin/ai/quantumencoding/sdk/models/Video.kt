@@ -179,3 +179,23 @@ data class HeyGenVoicesResponse(
 
 typealias VideoStudioRequest = StudioVideoRequest
 typealias VideoTranslateRequest = TranslateRequest
+
+// ── HeyGen typed responses (with request_id) ────────────────────────
+
+/**
+ * Response from listing HeyGen avatars (includes request_id).
+ */
+@Serializable
+data class HeyGenAvatarsResponse(
+    val avatars: List<JsonElement> = emptyList(),
+    @SerialName("request_id") val requestId: String = "",
+)
+
+/**
+ * Response from listing HeyGen templates (includes request_id).
+ */
+@Serializable
+data class HeyGenTemplatesResponse(
+    val templates: List<JsonElement> = emptyList(),
+    @SerialName("request_id") val requestId: String = "",
+)

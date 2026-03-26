@@ -99,3 +99,29 @@ data class DeleteResponse(
 data class SSHKeyRequest(
     @SerialName("ssh_public_key") val sshPublicKey: String = "",
 )
+
+/**
+ * Detailed compute instance info with GPU, cost, and uptime details.
+ */
+@Serializable
+data class ComputeInstanceInfo(
+    @SerialName("instance_id") val instanceId: String = "",
+    val template: String = "",
+    val status: String = "",
+    @SerialName("gcp_status") val gcpStatus: String? = null,
+    val zone: String = "",
+    @SerialName("machine_type") val machineType: String? = null,
+    @SerialName("external_ip") val externalIp: String? = null,
+    @SerialName("gpu_type") val gpuType: String? = null,
+    @SerialName("gpu_count") val gpuCount: Int? = null,
+    val spot: Boolean = false,
+    @SerialName("hourly_usd") val hourlyUsd: Double = 0.0,
+    @SerialName("cost_usd") val costUsd: Double = 0.0,
+    @SerialName("uptime_minutes") val uptimeMinutes: Int = 0,
+    @SerialName("auto_teardown_minutes") val autoTeardownMinutes: Int = 0,
+    @SerialName("ssh_username") val sshUsername: String? = null,
+    @SerialName("last_active_at") val lastActiveAt: String? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+    @SerialName("terminated_at") val terminatedAt: String? = null,
+    @SerialName("error_message") val errorMessage: String? = null,
+)

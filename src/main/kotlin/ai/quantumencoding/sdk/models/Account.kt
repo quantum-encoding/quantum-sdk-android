@@ -158,3 +158,12 @@ data class StatusResponse(
     val status: String = "",
     val message: String? = null,
 )
+
+/**
+ * Response from the contact form endpoint.
+ */
+@Serializable
+data class ContactResponse(
+    val status: String = "",
+    val message: String? = null,
+)
