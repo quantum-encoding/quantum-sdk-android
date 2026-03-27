@@ -1,14 +1,14 @@
-# Quantum SDK for Android
+# quantum-sdk
 
-Kotlin SDK for the [Cosmic Duck](https://cosmicduck.dev) / Quantum AI API.
+Kotlin client SDK for the [Quantum AI API](https://api.quantumencoding.ai).
 
-## Installation
+### Gradle
 
-Add the dependency to your app's `build.gradle.kts`:
+Add to your `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("dev.cosmicduck:quantum-sdk:1.0.0")
+    implementation("dev.cosmicduck:quantum-sdk:0.4.0")
 }
 ```
 
@@ -16,55 +16,57 @@ dependencies {
 
 ```kotlin
 import dev.cosmicduck.sdk.QuantumClient
-import dev.cosmicduck.sdk.models.*
 
-val client = QuantumClient(apiKey = "qai_k_xxx")
-```
-
-### Chat
-
-```kotlin
-val response = client.chat(
-    ChatRequest(
-        model = "gemini-2.5-flash",
-        messages = listOf(ChatMessage.user("Hello!"))
-    )
-)
+val client = QuantumClient("qai_k_your_key_here")
+val response = client.chat("gemini-2.5-flash", "Hello! What is quantum computing?")
 println(response.text())
 ```
 
-### Streaming Chat
+## Features
+
+- 110+ endpoints across 10 AI providers and 45+ models
+- Kotlin coroutines for async operations
+- Streaming via `Flow<StreamEvent>`
+- kotlinx.serialization for type-safe responses
+- Android (minSdk 26) and JVM targets
+- Agent orchestration with SSE event streams
+- GPU/CPU compute rental
+- Batch processing (50% discount)
+
+## Examples
+
+### Chat Completion
 
 ```kotlin
-client.chatStream(
-    ChatRequest(
-        model = "claude-sonnet-4-6",
-        messages = listOf(ChatMessage.user("Write a poem"))
-    )
-).collect { event ->
+import dev.cosmicduck.sdk.QuantumClient
+import dev.cosmicduck.sdk.models.*
+
+val client = QuantumClient("qai_k_your_key_here")
+
+val response = client.chat(ChatRequest(
+    model = "claude-sonnet-4-6",
+    messages = listOf(
+        ChatMessage.system("You are a helpful assistant."),
+        ChatMessage.user("Explain coroutines in Kotlin"),
+    ),
+    temperature = 0.7,
+    maxTokens = 1000,
+))
+println(response.text())
+```
+
+### Streaming
+
+```kotlin
+client.chatStream(ChatRequest(
+    model = "claude-sonnet-4-6",
+    messages = listOf(ChatMessage.user("Write a haiku about Kotlin")),
+)).collect { event ->
     when (event.type) {
         "content_delta" -> print(event.delta?.text ?: "")
-        "thinking_delta" -> { /* thinking content */ }
-        "tool_use" -> { /* handle tool call */ }
         "done" -> println("\n[Done]")
     }
 }
-```
-
-### Session Chat (server-managed history)
-
-```kotlin
-// Start a new session
-val resp = client.chatSession(SessionChatRequest(
-    message = "Hello!",
-    model = "gemini-2.5-flash",
-))
-
-// Continue the conversation
-val resp2 = client.chatSession(SessionChatRequest(
-    sessionId = resp.sessionId,
-    message = "Tell me more",
-))
 ```
 
 ### Image Generation
@@ -74,76 +76,106 @@ val images = client.generateImage(ImageRequest(
     model = "grok-imagine-image",
     prompt = "A cosmic duck in space",
 ))
-println(images.images.first().url)
+for (image in images.images) {
+    println(image.url ?: "base64")
+}
 ```
 
 ### Text-to-Speech
 
 ```kotlin
-val tts = client.speak(TTSRequest(
-    text = "Welcome to Cosmic Duck!",
+val audio = client.speak(TTSRequest(
+    text = "Welcome to Quantum AI!",
     voice = "alloy",
 ))
-println(tts.audioUrl)
+println(audio.audioUrl)
+```
+
+### Web Search
+
+```kotlin
+val results = client.webSearch("latest Kotlin releases 2026")
+for (result in results.results) {
+    println("${result.title}: ${result.url}")
+}
 ```
 
 ### Agent Orchestration
 
 ```kotlin
 client.agentRun(AgentRequest(
-    task = "Research the latest AI papers and summarize them"
+    task = "Research quantum computing breakthroughs"
 )).collect { event ->
-    println("${event.type}: ${event.content ?: ""}")
+    when (event.type) {
+        "content_delta" -> print(event.content ?: "")
+        "done" -> println("\n--- Done ---")
+    }
 }
 ```
 
-### Async Jobs (Video, 3D, etc.)
+## All Endpoints
+
+| Category | Endpoints | Description |
+|----------|-----------|-------------|
+| Chat | 2 | Text generation + session chat |
+| Agent | 2 | Multi-step orchestration + missions |
+| Images | 2 | Generation + editing |
+| Video | 7 | Generation, studio, translation, avatars |
+| Audio | 13 | TTS, STT, music, dialogue, dubbing, voice design |
+| Voices | 5 | Clone, list, delete, library, design |
+| Embeddings | 1 | Text embeddings |
+| RAG | 4 | Vertex AI + SurrealDB search |
+| Documents | 3 | Extract, chunk, process |
+| Search | 3 | Web search, context, answers |
+| Scanner | 11 | Code scanning, type queries, diffs |
+| Scraper | 2 | Doc scraping + screenshots |
+| Jobs | 3 | Async job management |
+| Compute | 7 | GPU/CPU rental |
+| Keys | 3 | API key management |
+| Account | 3 | Balance, usage, summary |
+| Credits | 6 | Packs, tiers, lifetime, purchase |
+| Batch | 4 | 50% discount batch processing |
+| Realtime | 3 | Voice sessions |
+| Models | 2 | Model list + pricing |
+
+## Authentication
+
+Pass your API key when creating the client:
 
 ```kotlin
-val job = client.createJob(JobCreateRequest(
-    type = "3d/generate",
-    params = mapOf("model" to JsonPrimitive("meshy-6"), "prompt" to JsonPrimitive("a robot"))
-))
-
-val result = client.pollJob(job.jobId)
-println("Status: ${result.status}")
+val client = QuantumClient("qai_k_your_key_here")
 ```
 
-## API Coverage
+The SDK sends it as the `X-API-Key` header. Both `qai_...` (primary) and `qai_k_...` (scoped) keys are supported. You can also use `Authorization: Bearer <key>`.
 
-| Category | Endpoints |
-|----------|-----------|
-| **Chat** | chat, chatStream, chatSession |
-| **Agent** | agentRun, missionRun |
-| **Image** | generateImage, editImage |
-| **Audio** | speak, transcribe, soundEffects, generateMusic, dialogue, speechToSpeech, isolateVoice, remixVoice, dub, align, voiceDesign, starfishTTS, generateMusicAdvanced, listFinetunes, createFinetune, deleteFinetune |
-| **Video** | generateVideo, videoStudio, videoTranslate, videoPhotoAvatar, videoDigitalTwin, videoAvatars, videoTemplates, videoHeygenVoices |
-| **Embeddings** | embed |
-| **Documents** | extractDocument, chunkDocument, processDocument |
-| **RAG** | ragSearch, ragCorpora, surrealRagSearch, surrealRagProviders |
-| **Models** | listModels, getPricing |
-| **Account** | accountBalance, accountUsage, accountUsageSummary, accountPricing |
-| **Jobs** | createJob, getJob, pollJob, listJobs, generate3D |
-| **Keys** | createKey, listKeys, revokeKey |
-| **Compute** | computeTemplates, computeProvision, computeInstances, computeInstance, computeDelete, computeSSHKey, computeKeepalive |
-| **Voices** | listVoices, cloneVoice, deleteVoice, voiceLibrary, addVoiceFromLibrary |
-| **Realtime** | realtimeSession, realtimeEnd, realtimeRefresh |
-| **Batch** | batchSubmit, batchSubmitJsonl, batchJobs, batchJob |
-| **Credits** | creditPacks, creditPurchase, creditBalance, creditTiers, devProgramApply |
-| **Auth** | authApple |
-| **Contact** | contact |
+Get your API key at [cosmicduck.dev](https://cosmicduck.dev).
 
-## Requirements
+## Pricing
 
-- Android minSdk 26
-- Kotlin 1.9+
-- Internet permission (automatically included)
+See [api.quantumencoding.ai/pricing](https://api.quantumencoding.ai/pricing) for current rates.
 
-## Dependencies
+The **Lifetime tier** offers 0% margin at-cost pricing via a one-time payment.
 
-- kotlinx.coroutines
-- kotlinx.serialization
-- OkHttp 4
+## Other SDKs
+
+All SDKs are at v0.4.0 with type parity verified by scanner.
+
+| Language | Package | Install |
+|----------|---------|---------|
+| Rust | quantum-sdk | `cargo add quantum-sdk` |
+| Go | quantum-sdk | `go get github.com/quantum-encoding/quantum-sdk` |
+| TypeScript | @quantum-encoding/quantum-sdk | `npm i @quantum-encoding/quantum-sdk` |
+| Python | quantum-sdk | `pip install quantum-sdk` |
+| Swift | QuantumSDK | Swift Package Manager |
+| **Kotlin** | quantum-sdk | Gradle dependency |
+
+MCP server: `npx @quantum-encoding/ai-conductor-mcp`
+
+## API Reference
+
+- Interactive docs: [api.quantumencoding.ai/docs](https://api.quantumencoding.ai/docs)
+- OpenAPI spec: [api.quantumencoding.ai/openapi.yaml](https://api.quantumencoding.ai/openapi.yaml)
+- LLM context: [api.quantumencoding.ai/llms.txt](https://api.quantumencoding.ai/llms.txt)
 
 ## License
 
