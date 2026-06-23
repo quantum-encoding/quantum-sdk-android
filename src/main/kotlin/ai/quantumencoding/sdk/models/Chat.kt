@@ -18,6 +18,14 @@ data class ChatRequest(
     val stream: Boolean? = null,
     val temperature: Double? = null,
     @SerialName("max_tokens") val maxTokens: Int? = null,
+    /** "auto" (default), "any" (force a tool), "none", or a specific tool name. */
+    @SerialName("tool_choice") val toolChoice: String? = null,
+    /** JSON Schema for structured output — the model is forced to return matching JSON. */
+    @SerialName("output_schema") val outputSchema: JsonObject? = null,
+    /** Reasoning budget: "none"/"low"/"medium"/"high"/"xhigh". Null = provider default. */
+    @SerialName("reasoning_effort") val reasoningEffort: String? = null,
+    /** Vertex context-cache resource name (e.g. "cachedContents/abc123"); Gemini only. */
+    @SerialName("cached_content") val cachedContent: String? = null,
     @SerialName("provider_options") val providerOptions: JsonObject? = null,
 )
 
