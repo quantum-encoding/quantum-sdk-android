@@ -9,7 +9,7 @@ import kotlinx.serialization.json.JsonElement
  */
 @Serializable
 data class JobCreateRequest(
-    @SerialName("type") val jobType: String = "",
+    @SerialName("type") val type: String = "",
     val params: JsonElement? = null,
 )
 
