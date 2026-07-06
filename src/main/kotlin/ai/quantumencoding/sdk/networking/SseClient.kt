@@ -256,7 +256,9 @@ internal object SseClient {
             "usage" -> {
                 val usage = ChatUsage(
                     inputTokens = raw["input_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
+                    cachedTokens = raw["cached_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
                     outputTokens = raw["output_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
+                    reasoningTokens = raw["reasoning_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
                     costTicks = raw["cost_ticks"]?.jsonPrimitive?.longOrNull ?: 0,
                 )
                 StreamEvent(type = type, usage = usage)
@@ -281,7 +283,9 @@ internal object SseClient {
         val usage = if (raw.containsKey("input_tokens") || raw.containsKey("output_tokens")) {
             ChatUsage(
                 inputTokens = raw["input_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
+                cachedTokens = raw["cached_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
                 outputTokens = raw["output_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
+                reasoningTokens = raw["reasoning_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
                 costTicks = raw["cost_ticks"]?.jsonPrimitive?.longOrNull ?: 0,
             )
         } else null
@@ -315,7 +319,9 @@ internal object SseClient {
         val usage = if (raw.containsKey("input_tokens") || raw.containsKey("output_tokens")) {
             ChatUsage(
                 inputTokens = raw["input_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
+                cachedTokens = raw["cached_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
                 outputTokens = raw["output_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
+                reasoningTokens = raw["reasoning_tokens"]?.jsonPrimitive?.intOrNull ?: 0,
                 costTicks = raw["cost_ticks"]?.jsonPrimitive?.longOrNull ?: 0,
             )
         } else null

@@ -33,11 +33,30 @@ data class AgentRequest(
 
 /**
  * A single event from an agent or mission SSE stream.
+ *
+ * The backend agentruntime `Event` carries `{type, role, content, data,
+ * timestamp, index}` (`internal/agentruntime/runtime.go`) and mission events
+ * carry `{type, mission_id, task_id, message, ...}`. The SDK parser unpacks
+ * the common stream fields onto this surface so consumers can react to
+ * deltas, tool-use, usage, and errors without re-parsing [data]. The raw
+ * payload is retained in [data] for event-type-specific access.
  */
 @Serializable
 data class AgentStreamEvent(
-    @SerialName("type") val eventType: String = "",
+    val type: String = "",
     val data: JsonObject? = null,
+    /** True for the terminal `done` event. */
+    val done: Boolean = false,
+    /** Worker name emitting a content delta, when present. */
+    val worker: String? = null,
+    /** Text content delta (or mission `message`) for this event. */
+    val content: String? = null,
+    /** Parsed tool_use block, when this event carries one. */
+    @SerialName("tool_use") val toolUse: StreamToolUse? = null,
+    /** Token/cost usage, when this event carries a usage report. */
+    val usage: ChatUsage? = null,
+    /** Error message, when this event is an error. */
+    val error: String? = null,
 )
 
 // ── Mission ──────────────────────────────────────────────────────────

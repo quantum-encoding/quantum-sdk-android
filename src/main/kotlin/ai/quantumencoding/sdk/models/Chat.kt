@@ -70,15 +70,28 @@ data class ContentBlock(
     val name: String? = null,
     val input: JsonObject? = null,
     @SerialName("thought_signature") val thoughtSignature: String? = null,
+    /** Base64-encoded payload, for blockType "image" and "file". */
+    val data: String? = null,
+    /** MIME type, e.g. "image/png", "application/pdf", "video/mp4". */
+    @SerialName("mime_type") val mimeType: String? = null,
+    /** File name, for blockType "file". */
+    @SerialName("file_name") val fileName: String? = null,
+    /** Remote resource URL (YouTube, gs://, etc.), for blockType "file_uri". */
+    @SerialName("file_uri") val fileUri: String? = null,
 )
 
 /**
- * Token and cost usage for a chat response.
+ * Token and cost usage for a chat response. Mirrors the backend
+ * `ChatUsage` contract (`internal/server/convert.go`): non-cached input
+ * tokens, cached input tokens (billed at the lower cached rate), total
+ * billable output tokens, reasoning-token sub-component, and cost in ticks.
  */
 @Serializable
 data class ChatUsage(
     @SerialName("input_tokens") val inputTokens: Int = 0,
+    @SerialName("cached_tokens") val cachedTokens: Int = 0,
     @SerialName("output_tokens") val outputTokens: Int = 0,
+    @SerialName("reasoning_tokens") val reasoningTokens: Int = 0,
     @SerialName("cost_ticks") val costTicks: Long = 0,
 )
 
@@ -132,7 +145,7 @@ data class StreamToolUse(
  * A parsed SSE event from a streaming chat response.
  */
 data class StreamEvent(
-    @SerialName("type") val eventType: String = "",
+    val type: String = "",
     val delta: StreamDelta? = null,
     @SerialName("tool_use") val toolUse: StreamToolUse? = null,
     val usage: ChatUsage? = null,
@@ -159,11 +172,4 @@ data class Citation(
     val title: String = "",
     val text: String = "",
     val index: Int = 0,
-)
-
-@Serializable
-data class ChatUsage(
-    @SerialName("input_tokens") val inputTokens: Int = 0,
-    @SerialName("output_tokens") val outputTokens: Int = 0,
-    @SerialName("cost_ticks") val costTicks: Long = 0,
 )
