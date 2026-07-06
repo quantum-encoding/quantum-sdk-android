@@ -1,0 +1,22 @@
+# Gradle / build output (regenerable — never track)
+.gradle/
+build/
+**/build/
+.cxx/
+.externalNativeBuild/
+
+# Android Studio / IntelliJ
+*.iml
+.idea/
+local.properties
+captures/
+
+# OS
+.DS_Store
+
+# Build outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+*.hprof
