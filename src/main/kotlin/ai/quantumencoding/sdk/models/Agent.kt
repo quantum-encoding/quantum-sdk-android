@@ -97,11 +97,6 @@ data class MissionRequest(
 typealias AgentWorkerConfig = AgentWorker
 
 /**
- * Backwards-compatible alias for [MissionWorker].
- */
-typealias MissionWorkerConfig = MissionWorker
-
-/**
  * A single SSE event from an agent run stream.
  */
 typealias AgentEvent = AgentStreamEvent

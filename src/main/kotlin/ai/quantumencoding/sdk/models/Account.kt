@@ -93,6 +93,11 @@ data class PricingResponse(
     val pricing: Map<String, PricingEntry> = emptyMap(),
 )
 
+/**
+ * Backwards-compatible alias for [PricingResponse].
+ */
+typealias AccountPricingResponse = PricingResponse
+
 // ── Models / Pricing ─────────────────────────────────────────────────
 
 /**

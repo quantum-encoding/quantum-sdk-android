@@ -12,8 +12,10 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.BufferedReader
 import java.io.IOException
@@ -163,12 +165,9 @@ suspend fun QuantumClient.computeBilling(request: BillingRequest): BillingRespon
         .url("$baseUrl/qai/v1/compute/billing")
         .header("Authorization", "Bearer $apiKey")
         .header("Content-Type", "application/json")
-        .post(jsonBody.toByteArray().let {
-            okhttp3.RequestBody.create(
-                okhttp3.MediaType.parse("application/json; charset=utf-8"),
-                it,
-            )
-        })
+        .post(
+            jsonBody.toRequestBody("application/json; charset=utf-8".toMediaType())
+        )
         .build()
 
     val response = suspendCancellableCoroutine { continuation ->

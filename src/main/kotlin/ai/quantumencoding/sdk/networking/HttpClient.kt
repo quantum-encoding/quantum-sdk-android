@@ -230,6 +230,7 @@ internal class HttpClient(
             costTicks = costHeader?.toLongOrNull() ?: 0,
             requestId = response.header("X-QAI-Request-Id") ?: "",
             model = response.header("X-QAI-Model") ?: "",
+            balanceAfter = response.header("X-QAI-Balance-After")?.toLongOrNull() ?: 0,
         )
     }
 

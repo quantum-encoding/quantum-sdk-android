@@ -162,6 +162,7 @@ data class ResponseMeta(
     @SerialName("cost_ticks") val costTicks: Long = 0,
     @SerialName("request_id") val requestId: String = "",
     val model: String = "",
+    @SerialName("balance_after") val balanceAfter: Long = 0,
 )
 
 // ── Cross-SDK parity ────────────────────────────────────────────────

@@ -47,3 +47,11 @@ data class RealtimeSession(
  * Backwards-compatible alias for [RealtimeSession].
  */
 typealias RealtimeSessionResponse = RealtimeSession
+
+/**
+ * Response from refreshing an ephemeral realtime token.
+ */
+@Serializable
+data class RealtimeRefreshResponse(
+    @SerialName("ephemeral_token") val ephemeralToken: String = "",
+)

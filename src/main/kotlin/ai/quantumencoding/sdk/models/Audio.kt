@@ -477,3 +477,63 @@ data class MusicFinetuneCreateRequest(
     val description: String? = null,
     val samples: List<String> = emptyList(),
 )
+
+// ── HeyGen Sounds Search (background music + sound effects) ─────────
+
+/**
+ * Query parameters for searching the sounds catalog.
+ */
+data class AudioSoundsQuery(
+    /** Natural-language description of the sound wanted (required). */
+    val query: String,
+    /**
+     * Catalog to search: "music" | "sound_effects" (API default: "music").
+     * Wire param: `type`.
+     */
+    val soundType: String? = null,
+    /** Max results, 1–50 (API default 10). */
+    val limit: Int? = null,
+    /** Minimum similarity score, 0–1 (API default 0.7). */
+    val minScore: Double? = null,
+    /** Opaque cursor from a previous response's `nextToken`. */
+    val token: String? = null,
+)
+
+/**
+ * A track from the sounds catalog.
+ */
+@Serializable
+data class AudioSound(
+    /** Track identifier. */
+    val id: String = "",
+    /** Track name. */
+    val name: String = "",
+    /** Track description. */
+    val description: String = "",
+    /**
+     * Pre-signed WAV URL with a limited lifetime — download promptly,
+     * do not cache.
+     */
+    @SerialName("audio_url") val audioUrl: String = "",
+    /** Duration in seconds. */
+    val duration: Double = 0.0,
+    /** Similarity score 0–1 (best first). */
+    val score: Double = 0.0,
+    /** "music" | "sound_effects". Wire field: `type`. */
+    @SerialName("type") val soundType: String = "",
+)
+
+/**
+ * Response from searching the sounds catalog (unbilled).
+ */
+@Serializable
+data class AudioSoundsResponse(
+    /** Matching tracks, best score first (empty page → `[]`). */
+    val sounds: List<AudioSound> = emptyList(),
+    /** More pages exist. */
+    @SerialName("has_more") val hasMore: Boolean = false,
+    /** Pass as `token` for the next page (may be empty). */
+    @SerialName("next_token") val nextToken: String = "",
+    /** Unique request identifier. */
+    @SerialName("request_id") val requestId: String = "",
+)

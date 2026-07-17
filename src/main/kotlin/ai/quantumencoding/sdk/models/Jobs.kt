@@ -10,7 +10,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class JobCreateRequest(
     @SerialName("type") val type: String = "",
-    val params: JsonElement? = null,
+    val params: Map<String, JsonElement>? = null,
 )
 
 /**
@@ -76,6 +76,11 @@ data class JobAcceptedResponse(
     @SerialName("type") val jobType: String? = null,
     @SerialName("request_id") val requestId: String? = null,
 )
+
+/**
+ * Backwards-compatible alias for [JobAcceptedResponse].
+ */
+typealias AsyncJobResponse = JobAcceptedResponse
 
 /**
  * A single job entry in the detailed job list response.

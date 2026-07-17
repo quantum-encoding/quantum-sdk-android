@@ -1,6 +1,7 @@
 package ai.quantumencoding.sdk
 
 import ai.quantumencoding.sdk.models.*
+import ai.quantumencoding.sdk.models.Collection
 import ai.quantumencoding.sdk.networking.HttpClient
 import ai.quantumencoding.sdk.networking.SseClient
 import kotlinx.coroutines.delay
@@ -188,8 +189,8 @@ class QuantumClient(
     /**
      * Generate speech from text.
      */
-    suspend fun speak(request: TTSRequest): TTSResponse {
-        val (data, meta) = http.doJson<TTSResponse>("POST", "/qai/v1/audio/tts", request)
+    suspend fun speak(request: TtsRequest): TtsResponse {
+        val (data, meta) = http.doJson<TtsResponse>("POST", "/qai/v1/audio/tts", request)
         return data.let {
             if (it.costTicks == 0L && meta.costTicks > 0) it.copy(costTicks = meta.costTicks) else it
         }.let {
@@ -200,8 +201,8 @@ class QuantumClient(
     /**
      * Convert speech to text.
      */
-    suspend fun transcribe(request: STTRequest): STTResponse {
-        val (data, meta) = http.doJson<STTResponse>("POST", "/qai/v1/audio/stt", request)
+    suspend fun transcribe(request: SttRequest): SttResponse {
+        val (data, meta) = http.doJson<SttResponse>("POST", "/qai/v1/audio/stt", request)
         return data.let {
             if (it.costTicks == 0L && meta.costTicks > 0) it.copy(costTicks = meta.costTicks) else it
         }.let {
@@ -365,6 +366,24 @@ class QuantumClient(
         return data
     }
 
+    /**
+     * Search HeyGen's background-music and sound-effects catalogs
+     * (semantic ranking, best score first). Unbilled catalog route.
+     *
+     * `audioUrl` values are pre-signed WAVs with a limited lifetime —
+     * download promptly, do not cache. Paginate via `nextToken`.
+     */
+    suspend fun searchAudioSounds(query: AudioSoundsQuery): AudioSoundsResponse {
+        val parts = mutableListOf("query=${urlEncode(query.query)}")
+        query.soundType?.let { parts.add("type=${urlEncode(it)}") }
+        query.limit?.let { parts.add("limit=$it") }
+        query.minScore?.let { parts.add("min_score=$it") }
+        query.token?.let { parts.add("token=${urlEncode(it)}") }
+        val path = "/qai/v1/audio/sounds?${parts.joinToString("&")}"
+        val (data, _) = http.doJson<AudioSoundsResponse>("GET", path)
+        return data
+    }
+
     // ── Video ────────────────────────────────────────────────────────
 
     /**
@@ -438,6 +457,136 @@ class QuantumClient(
         return data
     }
 
+    /**
+     * Inspect a HeyGen template's variable schema and scenes (unbilled).
+     *
+     * Only draft-v4 templates with variables are supported upstream; an
+     * unknown template id surfaces as a `provider_error`.
+     */
+    suspend fun videoTemplateDetail(templateId: String): VideoTemplateDetailResponse {
+        val (data, _) = http.doJson<VideoTemplateDetailResponse>(
+            "GET", "/qai/v1/video/template/$templateId"
+        )
+        return data
+    }
+
+    /**
+     * Render a video from a HeyGen template (async job type
+     * "video/template-v3").
+     *
+     * Returns the accepted-job envelope — poll with [getJob] / [pollJob]
+     * until "completed"/"failed", then read `result.video_url`. Deep
+     * validation happens at execution time, so violations surface as a
+     * failed job rather than a 4xx at submit.
+     */
+    suspend fun videoTemplateGenerate(
+        templateId: String,
+        request: VideoTemplateGenerateRequest,
+    ): JobAcceptedResponse {
+        val (data, _) = http.doJson<JobAcceptedResponse>(
+            "POST", "/qai/v1/video/template/$templateId", request
+        )
+        return data
+    }
+
+    /**
+     * Submit 1–100 raw HeyGen video payloads as one batch (202 Accepted).
+     *
+     * Poll [videoBatchStatus] for progress and delivery.
+     */
+    suspend fun videoBatchSubmit(request: VideoBatchSubmitRequest): VideoBatchSubmitResponse {
+        val (data, _) = http.doJson<VideoBatchSubmitResponse>(
+            "POST", "/qai/v1/video/batch", request
+        )
+        return data
+    }
+
+    /**
+     * Get a batch's status plus one cursor-paginated page of items.
+     *
+     * Poll (~5s) until `status` is terminal, then keep polling until
+     * `billingStatus == "settled"` — per-item `videoUrl` values are
+     * withheld until settlement. Collect URLs across pages via `nextToken`.
+     */
+    suspend fun videoBatchStatus(
+        batchId: String,
+        query: VideoBatchStatusQuery? = null,
+    ): VideoBatchStatusResponse {
+        val parts = mutableListOf<String>()
+        query?.limit?.let { parts.add("limit=$it") }
+        query?.token?.let { parts.add("token=${urlEncode(it)}") }
+        val path = buildString {
+            append("/qai/v1/video/batch/$batchId")
+            if (parts.isNotEmpty()) {
+                append("?")
+                append(parts.joinToString("&"))
+            }
+        }
+        val (data, _) = http.doJson<VideoBatchStatusResponse>("GET", path)
+        return data
+    }
+
+    // ── Avatar Realtime (HeyGen Broadcast) ───────────────────────────
+
+    /**
+     * Create a live avatar realtime session (HeyGen Broadcast).
+     *
+     * PREPAID: the entire `maxDurationSeconds` block (1–3600 s) is charged
+     * at create time; cancelling early does NOT refund.
+     */
+    suspend fun createAvatarRealtimeSession(
+        request: AvatarRealtimeRequest,
+    ): AvatarRealtimeCreateResponse {
+        val (data, meta) = http.doJson<AvatarRealtimeCreateResponse>(
+            "POST", "/qai/v1/avatar/realtime", request
+        )
+        return data.let {
+            if (it.costTicks == 0L && meta.costTicks > 0) it.copy(costTicks = meta.costTicks) else it
+        }.let {
+            if (it.balanceAfter == 0L && meta.balanceAfter > 0) it.copy(balanceAfter = meta.balanceAfter) else it
+        }.let {
+            if (it.requestId.isEmpty()) it.copy(requestId = meta.requestId) else it
+        }
+    }
+
+    /**
+     * Get the live status of an avatar realtime session.
+     *
+     * Poll (~2s) until `status == "streaming"`, then play `hlsUrl`.
+     * "completed" and "error" are terminal.
+     */
+    suspend fun getAvatarRealtimeSession(streamId: String): AvatarRealtimeStatusResponse {
+        val (data, _) = http.doJson<AvatarRealtimeStatusResponse>(
+            "GET", "/qai/v1/avatar/realtime/$streamId"
+        )
+        return data
+    }
+
+    /**
+     * Append a text delta to a `text_stream` session (or close it with
+     * [AvatarRealtimeTextRequest.finalMarker]).
+     */
+    suspend fun sendAvatarRealtimeText(
+        streamId: String,
+        request: AvatarRealtimeTextRequest,
+    ): AvatarRealtimeTextResponse {
+        val (data, _) = http.doJson<AvatarRealtimeTextResponse>(
+            "POST", "/qai/v1/avatar/realtime/$streamId/text", request
+        )
+        return data
+    }
+
+    /**
+     * Terminate an avatar realtime session early (idempotent; no refund —
+     * this only stops HeyGen's upstream meter).
+     */
+    suspend fun cancelAvatarRealtimeSession(streamId: String): AvatarRealtimeCancelResponse {
+        val (data, _) = http.doJson<AvatarRealtimeCancelResponse>(
+            "POST", "/qai/v1/avatar/realtime/$streamId/cancel"
+        )
+        return data
+    }
+
     // ── Embeddings ───────────────────────────────────────────────────
 
     /**
@@ -498,8 +647,8 @@ class QuantumClient(
     /**
      * Search Vertex AI RAG corpora for relevant documentation.
      */
-    suspend fun ragSearch(request: RAGSearchRequest): RAGSearchResponse {
-        val (data, meta) = http.doJson<RAGSearchResponse>("POST", "/qai/v1/rag/search", request)
+    suspend fun ragSearch(request: RagSearchRequest): RagSearchResponse {
+        val (data, meta) = http.doJson<RagSearchResponse>("POST", "/qai/v1/rag/search", request)
         return data.let {
             if (it.costTicks == 0L && meta.costTicks > 0) it.copy(costTicks = meta.costTicks) else it
         }.let {
@@ -510,16 +659,16 @@ class QuantumClient(
     /**
      * List available Vertex AI RAG corpora.
      */
-    suspend fun ragCorpora(): List<RAGCorpus> {
-        val (data, _) = http.doJson<RAGCorporaResponse>("GET", "/qai/v1/rag/corpora")
+    suspend fun ragCorpora(): List<RagCorpus> {
+        val (data, _) = http.doJson<RagCorporaResponse>("GET", "/qai/v1/rag/corpora")
         return data.corpora
     }
 
     /**
      * Search provider API documentation via SurrealDB vector search.
      */
-    suspend fun surrealRagSearch(request: SurrealRAGSearchRequest): SurrealRAGSearchResponse {
-        val (data, meta) = http.doJson<SurrealRAGSearchResponse>("POST", "/qai/v1/rag/surreal/search", request)
+    suspend fun surrealRagSearch(request: SurrealRagSearchRequest): SurrealRagSearchResponse {
+        val (data, meta) = http.doJson<SurrealRagSearchResponse>("POST", "/qai/v1/rag/surreal/search", request)
         return data.let {
             if (it.costTicks == 0L && meta.costTicks > 0) it.copy(costTicks = meta.costTicks) else it
         }.let {
@@ -530,8 +679,8 @@ class QuantumClient(
     /**
      * List available documentation providers in SurrealDB RAG.
      */
-    suspend fun surrealRagProviders(): SurrealRAGProvidersResponse {
-        val (data, _) = http.doJson<SurrealRAGProvidersResponse>("GET", "/qai/v1/rag/surreal/providers")
+    suspend fun surrealRagProviders(): SurrealRagProvidersResponse {
+        val (data, _) = http.doJson<SurrealRagProvidersResponse>("GET", "/qai/v1/rag/surreal/providers")
         return data
     }
 
@@ -1058,6 +1207,9 @@ class QuantumClient(
     }
 
     // ── Private helpers ──────────────────────────────────────────────
+
+    private fun urlEncode(value: String): String =
+        java.net.URLEncoder.encode(value, "UTF-8")
 
     private fun backfill(data: ImageResponse, meta: ResponseMeta): ImageResponse {
         return data.let {

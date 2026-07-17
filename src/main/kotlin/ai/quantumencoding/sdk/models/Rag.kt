@@ -122,12 +122,3 @@ data class RagCorporaResponse(
 data class ModelsResponse(
     val models: List<ModelInfo> = emptyList(),
 )
-
-@Serializable
-data class ModelInfo(
-    val id: String = "",
-    val provider: String = "",
-    @SerialName("display_name") val displayName: String = "",
-    @SerialName("input_per_million") val inputPerMillion: Double = 0.0,
-    @SerialName("output_per_million") val outputPerMillion: Double = 0.0,
-)
