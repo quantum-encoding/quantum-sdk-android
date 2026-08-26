@@ -30,7 +30,7 @@ println(response.text())
 - kotlinx.serialization for type-safe responses
 - Android (minSdk 26) and JVM targets
 - Agent orchestration with SSE event streams
-- GPU/CPU compute rental
+- GPU/CPU compute rental (requires per-account admin approval)
 - Batch processing (50% discount)
 
 ## Examples
@@ -130,7 +130,7 @@ client.agentRun(AgentRequest(
 | Scanner | 11 | Code scanning, type queries, diffs |
 | Scraper | 2 | Doc scraping + screenshots |
 | Jobs | 3 | Async job management |
-| Compute | 7 | GPU/CPU rental |
+| Compute | 7 | GPU/CPU rental (admin-approved accounts only) |
 | Keys | 3 | API key management |
 | Account | 3 | Balance, usage, summary |
 | Credits | 6 | Packs, tiers, lifetime, purchase |
