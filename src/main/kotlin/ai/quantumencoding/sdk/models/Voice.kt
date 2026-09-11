@@ -10,12 +10,28 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Voice(
+    /** Voice identifier, passed as `voice` on a TTS request. */
     @SerialName("voice_id") val voiceId: String = "",
+    /** Human-readable voice name. */
     val name: String = "",
+    /** Voice category, e.g. "premade", "cloned", "professional". */
+    val category: String? = null,
+    /** Provider serving this voice, e.g. "gemini", "openai", "elevenlabs". */
     val provider: String? = null,
+    /**
+     * TTS model id to pass back for this voice, so a picker never hardcodes
+     * the provider-to-model mapping. For ElevenLabs, which serves several
+     * models against one voice, this is the standard default and may be
+     * overridden.
+     */
+    val model: String? = null,
     val languages: List<String>? = null,
     val gender: String? = null,
+    /** Whether this is a cloned or professional voice rather than a prebuilt one. */
     @SerialName("is_cloned") val isCloned: Boolean? = null,
+    /** Description of the voice's characteristics. */
+    val description: String? = null,
+    /** URL to preview the voice. */
     @SerialName("preview_url") val previewUrl: String? = null,
 )
 
@@ -25,6 +41,7 @@ data class Voice(
 @Serializable
 data class VoicesResponse(
     val voices: List<Voice> = emptyList(),
+    @SerialName("request_id") val requestId: String = "",
 )
 
 /**

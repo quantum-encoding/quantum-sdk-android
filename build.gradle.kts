@@ -58,7 +58,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "ai.quantumencoding"
             artifactId = "quantum-sdk"
-            version = "0.3.0"
+            version = "0.4.0"
 
             afterEvaluate {
                 from(components["release"])

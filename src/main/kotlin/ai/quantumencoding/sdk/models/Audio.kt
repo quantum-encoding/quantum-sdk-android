@@ -7,15 +7,102 @@ import kotlinx.serialization.json.JsonElement
 // ── TTS ──────────────────────────────────────────────────────────────
 
 /**
+ * ElevenLabs voice tuning. Ignored by every other provider.
+ *
+ * Every field is nullable because an absent knob leaves the provider default
+ * alone, which is not the same as sending 0: 0.0 stability is a real setting
+ * the provider honours, so a zeroed object silently retunes the voice.
+ */
+@Serializable
+data class TtsVoiceSettings(
+    /** 0.0-1.0. Lower is more expressive and less consistent. */
+    val stability: Double? = null,
+    /** 0.0-1.0. How closely to track the original voice. */
+    @SerialName("similarity_boost") val similarityBoost: Double? = null,
+    /** 0.0-1.0 style exaggeration. */
+    val style: Double? = null,
+    /** Boost resemblance to the original speaker. */
+    @SerialName("use_speaker_boost") val useSpeakerBoost: Boolean? = null,
+)
+
+/**
+ * One voice in a Gemini two-speaker dialogue.
+ */
+@Serializable
+data class TtsSpeaker(
+    /**
+     * The label this speaker's lines carry in the text, e.g. "Lacey" for
+     * lines written as `Lacey: …`.
+     */
+    val name: String = "",
+    /** The prebuilt voice that reads those lines, e.g. "Laomedeia". */
+    val voice: String = "",
+)
+
+/**
  * Request body for text-to-speech.
+ *
+ * Only [text] is required. Leaving [model] empty gets the gateway's house
+ * voice: `gemini-3.1-flash-tts-preview` with the `Laomedeia` voice — the
+ * field is omitted from the body rather than sent as `""`.
+ *
+ * Most of the steering is prose, not parameters — see [instructions] and the
+ * inline audio tags described in the README under "Steering a Gemini voice".
  */
 @Serializable
 data class TtsRequest(
+    /**
+     * TTS model. Empty = the gateway default,
+     * `gemini-3.1-flash-tts-preview`, paired with the `Laomedeia` voice. Also
+     * `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts`, OpenAI
+     * `openai-tts-1` / `gpt-4o-mini-tts`, xAI `grok-tts`, ElevenLabs
+     * `eleven_*`.
+     */
     val model: String = "",
+    /**
+     * What to say. May carry inline audio tags ("[whispers]", "[excited]", …)
+     * and, for dialogue, the speaker labels named in [speakers].
+     */
     val text: String = "",
+    /**
+     * A voice id from `listVoices()`. Gemini's default is `Laomedeia`.
+     * Ignored when [speakers] is set.
+     */
     val voice: String? = null,
+    /** Audio format: "mp3" (default), "wav", "opus", "pcm". */
     @SerialName("format") val outputFormat: String? = null,
+    /**
+     * Speech rate, 0.7-1.5. xAI only — on Gemini, ask for it in
+     * [instructions] ("at a slow, measured pace").
+     */
     val speed: Double? = null,
+    /**
+     * Style direction: tone, pace, accent, character. On Gemini this is
+     * prepended to the prompt and is the main way to steer a read, since
+     * Gemini exposes no knobs for any of it. On OpenAI only gpt-4o-mini-tts
+     * honours it — tts-1/tts-1-hd reject the field and the gateway drops it.
+     */
+    val instructions: String? = null,
+    /**
+     * BCP-47 tag, e.g. "en-GB", "es-ES", or "auto". Gemini detects the
+     * language on its own; set this to pin the pronunciation or accent
+     * family. Also drives xAI pronunciation, where an English default sounds
+     * robotic on other languages.
+     */
+    val language: String? = null,
+    /** Output sample rate in Hz, e.g. 24000 or 44100. xAI only. */
+    @SerialName("sample_rate") val sampleRate: Int? = null,
+    /** Output bit rate in bits/sec, e.g. 128000. xAI only. */
+    @SerialName("bit_rate") val bitRate: Int? = null,
+    /** ElevenLabs synthesis tuning. Ignored by every other provider. */
+    @SerialName("voice_settings") val voiceSettings: TtsVoiceSettings? = null,
+    /**
+     * Two-voice dialogue on Gemini TTS. Each entry pairs a speaker label used
+     * in [text] ("Lacey: …") with the prebuilt voice that reads it. EXACTLY
+     * TWO — the gateway rejects any other count with a 400 — and [voice] is
+     * then ignored.
+     */
+    val speakers: List<TtsSpeaker>? = null,
 )
 
 /**
