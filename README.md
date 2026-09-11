@@ -69,6 +69,71 @@ client.chatStream(ChatRequest(
 }
 ```
 
+### Reasoning state across a tool loop
+
+Reasoning models on the OpenAI and xAI lanes mint a `reasoning` content block
+alongside their `tool_use` blocks. It is the provider's own state, opaque, and
+it must go back **unchanged and in the same position** on the next turn's
+assistant message — its place among the tool calls is how the provider learns
+where the reasoning sat. Drop it and the reasoning tokens are re-billed on
+every round of the loop.
+
+The simplest correct thing is to hand the whole `content` list back:
+
+```kotlin
+val messages = mutableListOf(ChatMessage.user("What is the weather in Oslo?"))
+
+val response = client.chat(
+    ChatRequest(
+        model = "gpt-5.6",
+        messages = messages,
+        // One key per conversation, reused on every turn, so all of them land
+        // on the same warm provider cache shard.
+        promptCacheKey = "conv-7f3a",
+    )
+)
+
+// Verbatim, in order: reasoning blocks, tool_use blocks, text blocks.
+messages += ChatMessage(role = "assistant", contentBlocks = response.content)
+// ... then add one tool-result message per tool_use block and loop.
+```
+
+`ContentBlock.reasoning` is a `JsonElement` holding the provider's item as it
+arrived — never inspect or rebuild it. A `thinking` block is the
+human-readable summary of the same turn: render that one, replay this one.
+
+On Gemini 3 the equivalent state is `ContentBlock.thoughtSignature`, and it now
+rides the **text** block of a turn that ended in text as well as the `tool_use`
+blocks. Streaming delivers it as a `thought_signature` event just before
+`done`, on `StreamEvent.thoughtSignature`.
+
+### Provider options
+
+`providerOptions` is an open `JsonObject`, so a key the gateway documents but
+this SDK version does not name still rides through — as does the flat `region`
+entry:
+
+```kotlin
+ChatRequest(
+    model = "gpt-5.6",
+    messages = messages,
+    providerOptions = buildJsonObject {
+        putJsonObject("openai") {
+            put("reasoning_summary", "detailed")   // auto | concise | detailed | none
+            put("reasoning_mode", "pro")           // standard | pro
+            put("verbosity", "low")                // low | medium | high
+            put("text_format", "json_object")      // text | json_object
+        }
+        putJsonObject("xai") { put("native_files", true) }
+        put("region", "europe")                    // americas | europe | asia
+    },
+)
+```
+
+`reasoningEffort` accepts `none`, `low`, `medium`, `high`, `xhigh` and `max` on
+both the chat and session lanes; each adapter folds a tier its model lacks onto
+the nearest one.
+
 ### Image Generation
 
 ```kotlin

@@ -22,10 +22,39 @@ data class ChatRequest(
     @SerialName("tool_choice") val toolChoice: String? = null,
     /** JSON Schema for structured output — the model is forced to return matching JSON. */
     @SerialName("output_schema") val outputSchema: JsonObject? = null,
-    /** Reasoning budget: "none"/"low"/"medium"/"high"/"xhigh". Null = provider default. */
+    /**
+     * Reasoning budget: "none"/"low"/"medium"/"high"/"xhigh"/"max". Null =
+     * provider default. Each adapter folds a tier its model lacks onto the
+     * nearest one.
+     */
     @SerialName("reasoning_effort") val reasoningEffort: String? = null,
+    /**
+     * Pins every turn of one conversation to the same provider prompt-cache
+     * shard. Any stable string kept per conversation: the gateway hashes it
+     * with the caller's identity before forwarding it as OpenAI/xAI
+     * `prompt_cache_key` (or `x-grok-conv-id` on the xAI chat-completions
+     * lane). Null = derived from the caller's identity alone, which puts all
+     * of one user's conversations on one shard. Generate one per conversation
+     * object and reuse it on every turn.
+     *
+     * Honored by POST /qai/v1/chat only: the session endpoint derives its key
+     * from the session ID and ignores a client-supplied one.
+     */
+    @SerialName("prompt_cache_key") val promptCacheKey: String? = null,
     /** Vertex context-cache resource name (e.g. "cachedContents/abc123"); Gemini only. */
     @SerialName("cached_content") val cachedContent: String? = null,
+    /**
+     * Provider-specific settings, keyed by provider. An open [JsonObject], so
+     * a key the gateway documents but this SDK version does not name still
+     * rides through, as does the flat `region` entry.
+     *
+     *   provider_options.openai.reasoning_summary  auto|concise|detailed|none
+     *   provider_options.openai.reasoning_mode     standard|pro
+     *   provider_options.openai.verbosity          low|medium|high
+     *   provider_options.openai.text_format        text|json_object
+     *   provider_options.xai.native_files          boolean
+     *   provider_options.region                    americas|europe|asia
+     */
     @SerialName("provider_options") val providerOptions: JsonObject? = null,
 )
 
@@ -69,7 +98,33 @@ data class ContentBlock(
     val id: String? = null,
     val name: String? = null,
     val input: JsonObject? = null,
+    /**
+     * Gemini thought signature (base64). Rides "tool_use" blocks and, on
+     * Gemini 3, the "text" block of a turn that ended in text. Echo it back on
+     * the corresponding block of the next turn's assistant message. A
+     * streaming turn that ends in text carries it on the "thought_signature"
+     * event instead — see [StreamEvent.thoughtSignature].
+     */
     @SerialName("thought_signature") val thoughtSignature: String? = null,
+    /**
+     * The provider's own reasoning item, verbatim, on a block whose
+     * [blockType] is "reasoning". Opaque — never inspect or rebuild it. Pass
+     * the whole block back untouched, IN THE POSITION IT ARRIVED IN, on the
+     * next turn's assistant message: its place among the "tool_use" blocks is
+     * how the provider learns where the reasoning sat, and replaying it behind
+     * the call it reasoned about is a different conversation the provider
+     * rejects. Dropping it re-bills the reasoning tokens on every round of a
+     * tool loop.
+     *
+     * Distinct from a "thinking" block, which is the human-readable summary of
+     * the same turn: one is for the reader, one is for the wire.
+     */
+    val reasoning: JsonElement? = null,
+    /**
+     * Model that produced a "reasoning" block. Reasoning state is bound to its
+     * model, so a block is never replayed to a different one.
+     */
+    @SerialName("minted_by") val mintedBy: String? = null,
     /** Base64-encoded payload, for blockType "image" and "file". */
     val data: String? = null,
     /** MIME type, e.g. "image/png", "application/pdf", "video/mp4". */
@@ -149,6 +204,14 @@ data class StreamEvent(
     val delta: StreamDelta? = null,
     @SerialName("tool_use") val toolUse: StreamToolUse? = null,
     val usage: ChatUsage? = null,
+    /**
+     * Gemini 3's signature (base64) for a stream that ended in text, on the
+     * "thought_signature" event the gateway sends just before "done". It also
+     * rides the atomic "tool_use" event. Store it on the assistant block
+     * echoed back next turn — the same value [ContentBlock.thoughtSignature]
+     * carries on a non-streaming response.
+     */
+    @SerialName("thought_signature") val thoughtSignature: String? = null,
     val error: String? = null,
     val done: Boolean = false,
 )

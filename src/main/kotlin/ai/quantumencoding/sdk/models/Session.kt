@@ -36,6 +36,19 @@ data class SessionChatRequest(
     val stream: Boolean? = null,
     @SerialName("system_prompt") val systemPrompt: String? = null,
     @SerialName("context_config") val contextConfig: ContextConfig? = null,
+    /**
+     * Reasoning budget: "none"/"low"/"medium"/"high"/"xhigh"/"max". Null =
+     * provider default. Mirrors [ChatRequest.reasoningEffort]; the session
+     * handler validates the same set.
+     */
+    @SerialName("reasoning_effort") val reasoningEffort: String? = null,
+    /**
+     * Provider-specific settings — the same open map as
+     * [ChatRequest.providerOptions].
+     *
+     * The session lane has no `prompt_cache_key`: it derives one from the
+     * session ID, so every turn of a session already shares a cache shard.
+     */
     @SerialName("provider_options") val providerOptions: JsonObject? = null,
 )
 

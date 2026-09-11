@@ -233,7 +233,7 @@ internal object SseClient {
     /**
      * Parse a raw JSON object into a [StreamEvent].
      */
-    private fun parseStreamEvent(raw: JsonObject): StreamEvent {
+    internal fun parseStreamEvent(raw: JsonObject): StreamEvent {
         val type = raw["type"]?.jsonPrimitive?.content ?: "unknown"
 
         return when (type) {
@@ -250,8 +250,21 @@ internal object SseClient {
                     name = raw["name"]?.jsonPrimitive?.content ?: "",
                     input = raw["input"]?.jsonObject ?: JsonObject(emptyMap()),
                 )
-                StreamEvent(type = type, toolUse = toolUse)
+                // Gemini rides its signature on this event; the client echoes
+                // it on the tool_use block of the next turn.
+                StreamEvent(
+                    type = type,
+                    toolUse = toolUse,
+                    thoughtSignature = raw["thought_signature"]?.jsonPrimitive?.content,
+                )
             }
+
+            // Gemini 3 signs a turn that ended in TEXT; the gateway sends this
+            // just before "done".
+            "thought_signature" -> StreamEvent(
+                type = type,
+                thoughtSignature = raw["thought_signature"]?.jsonPrimitive?.content,
+            )
 
             "usage" -> {
                 val usage = ChatUsage(
