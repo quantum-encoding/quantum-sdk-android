@@ -8,17 +8,28 @@ Add to your `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("dev.cosmicduck:quantum-sdk:0.4.0")
+    implementation("ai.quantumencoding:quantum-sdk:0.2.0")
 }
 ```
+
+0.2.0 is the newest release on Maven Central. The examples below follow this
+repository's source (0.4.0), which has not been published yet; build from
+source for the newer API.
 
 ## Quick Start
 
 ```kotlin
-import dev.cosmicduck.sdk.QuantumClient
+import ai.quantumencoding.sdk.QuantumClient
+import ai.quantumencoding.sdk.models.ChatMessage
+import ai.quantumencoding.sdk.models.ChatRequest
 
 val client = QuantumClient("qai_k_your_key_here")
-val response = client.chat("gemini-2.5-flash", "Hello! What is quantum computing?")
+val response = client.chat(
+    ChatRequest(
+        model = "gemini-2.5-flash",
+        messages = listOf(ChatMessage.user("Hello! What is quantum computing?")),
+    )
+)
 println(response.text())
 ```
 
@@ -38,8 +49,8 @@ println(response.text())
 ### Chat Completion
 
 ```kotlin
-import dev.cosmicduck.sdk.QuantumClient
-import dev.cosmicduck.sdk.models.*
+import ai.quantumencoding.sdk.QuantumClient
+import ai.quantumencoding.sdk.models.*
 
 val client = QuantumClient("qai_k_your_key_here")
 
@@ -141,8 +152,9 @@ val images = client.generateImage(ImageRequest(
     model = "grok-imagine-image",
     prompt = "A cosmic duck in space",
 ))
+// Each image arrives inline, base64-encoded — there is no URL to fetch.
 for (image in images.images) {
-    println(image.url ?: "base64")
+    println("image ${image.index}: ${image.format}, ${image.base64.length} base64 chars")
 }
 ```
 
@@ -220,8 +232,8 @@ ElevenLabs-only. On Gemini, ask for pace in `instructions` instead.
 ### Web Search
 
 ```kotlin
-val results = client.webSearch("latest Kotlin releases 2026")
-for (result in results.results) {
+val results = client.webSearch(WebSearchRequest(query = "latest Kotlin releases 2026"))
+for (result in results.web) {
     println("${result.title}: ${result.url}")
 }
 ```
@@ -284,16 +296,14 @@ The **Lifetime tier** offers 0% margin at-cost pricing via a one-time payment.
 
 ## Other SDKs
 
-All SDKs are at v0.4.0 with type parity verified by scanner.
-
 | Language | Package | Install |
 |----------|---------|---------|
 | Rust | quantum-sdk | `cargo add quantum-sdk` |
-| Go | quantum-sdk | `go get github.com/quantum-encoding/quantum-sdk` |
-| TypeScript | @quantum-encoding/quantum-sdk | `npm i @quantum-encoding/quantum-sdk` |
-| Python | quantum-sdk | `pip install quantum-sdk` |
-| Swift | QuantumSDK | Swift Package Manager |
-| **Kotlin** | quantum-sdk | Gradle dependency |
+| Go | github.com/quantum-encoding/quantum-sdk | `go get github.com/quantum-encoding/quantum-sdk` |
+| TypeScript | quantum-ai-sdk | `npm install quantum-ai-sdk` |
+| Python | quantum-ai-sdk | `pip install quantum-ai-sdk` |
+| Swift | QuantumSDK | Swift Package Manager: `https://github.com/quantum-encoding/quantum-sdk-swift.git` |
+| **Kotlin** | ai.quantumencoding:quantum-sdk | `implementation("ai.quantumencoding:quantum-sdk:0.2.0")` |
 
 MCP server: `npx @quantum-encoding/ai-conductor-mcp`
 
