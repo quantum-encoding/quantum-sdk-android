@@ -418,11 +418,13 @@ class QuantumClient(
     }
 
     /**
-     * Create a digital twin via HeyGen. Returns an async job.
+     * Create a digital twin from training footage via HeyGen. Billed a flat
+     * fee. Returns synchronously with the twin's group id and a consent URL
+     * to send to the person in the footage; training waits for that consent.
      */
-    suspend fun videoDigitalTwin(request: DigitalTwinRequest): AsyncJobResponse {
-        val (data, _) = http.doJson<AsyncJobResponse>("POST", "/qai/v1/video/digital-twin", request)
-        return data
+    suspend fun videoDigitalTwin(request: DigitalTwinCreateRequest): DigitalTwinCreateResponse {
+        val (data, meta) = http.doJson<DigitalTwinCreateResponse>("POST", "/qai/v1/video/digital-twin", request)
+        return if (data.requestId.isEmpty()) data.copy(requestId = meta.requestId) else data
     }
 
     /**

@@ -81,14 +81,46 @@ data class PhotoAvatarRequest(
 // ── HeyGen Digital Twin ──────────────────────────────────────────────
 
 /**
- * Request body for digital twin video generation.
+ * Request body for creating a digital twin from training footage
+ * (`POST /qai/v1/video/digital-twin`). This trains an avatar; it does not
+ * render a video.
  */
 @Serializable
-data class DigitalTwinRequest(
-    @SerialName("avatar_id") val avatarId: String = "",
-    val script: String = "",
-    @SerialName("voice_id") val voiceId: String? = null,
-    @SerialName("aspect_ratio") val aspectRatio: String? = null,
+data class DigitalTwinCreateRequest(
+    /** Display name for the twin. Required. */
+    val name: String,
+    /** Public URL of the training footage. Required. */
+    @SerialName("video_url") val videoUrl: String,
+    /** Add the look to an existing avatar group instead of creating one. */
+    @SerialName("avatar_group_id") val avatarGroupId: String? = null,
+)
+
+/**
+ * Response from creating a digital twin. Synchronous, not a job: training
+ * continues at HeyGen once the subject of the footage completes consent.
+ */
+@Serializable
+data class DigitalTwinCreateResponse(
+    /** Echo of the twin's name. */
+    val name: String = "",
+    /**
+     * Hosted consent page (valid 24h) for the person in the footage. Training
+     * waits until they complete it. Empty when the gateway could not mint one;
+     * `POST /qai/v1/video/digital-twin/{group_id}/consent-link` mints a fresh one.
+     */
+    @SerialName("consent_url") val consentUrl: String = "",
+    /** Billing model label. */
+    val model: String = "",
+    /** Avatar group holding the twin; absent when HeyGen returned no group. */
+    @SerialName("group_id") val groupId: String? = null,
+    /** Group training status: "processing", "pending_consent", "failed" or "completed". */
+    val status: String? = null,
+    /** Consent status of the group. */
+    @SerialName("consent_status") val consentStatus: String? = null,
+    /** Look id of the trained twin, usable as an avatar id when rendering. */
+    @SerialName("avatar_id") val avatarId: String? = null,
+    /** Unique request identifier. */
+    @SerialName("request_id") val requestId: String = "",
 )
 
 // ── HeyGen Avatars ───────────────────────────────────────────────────

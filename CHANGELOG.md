@@ -55,6 +55,14 @@ still accepts.
 - `collectionsList` and `collectionsSearch` threw a decoding error when there
   was nothing to return, because the gateway encodes an empty list as JSON
   `null`. Both now return an empty list.
+- `videoDigitalTwin` sent a render-style body (`avatar_id`, `script`,
+  `voice_id`, `aspect_ratio`) to `POST /qai/v1/video/digital-twin`. That
+  route creates a twin from training footage and answers 400 without
+  `video_url`. The method now takes `DigitalTwinCreateRequest` (`name`,
+  `videoUrl`, optional `avatarGroupId`) and returns `DigitalTwinCreateResponse`
+  (`name`, `consentUrl`, `model`, `groupId`, `status`, `consentStatus`,
+  `avatarId`, `requestId`), the synchronous answer the route sends, instead
+  of `AsyncJobResponse`. `DigitalTwinRequest` is removed.
 
 ### Docs
 - README endpoint table drops the Documents, Batch and Scanner rows and the
