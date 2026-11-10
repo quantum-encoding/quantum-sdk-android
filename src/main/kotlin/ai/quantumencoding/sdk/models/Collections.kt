@@ -20,41 +20,40 @@ data class Collection(
 )
 
 /**
- * A document within a collection.
- */
-@Serializable
-data class CollectionDocument(
-    @SerialName("file_id") val fileId: String = "",
-    val name: String = "",
-    @SerialName("size_bytes") val sizeBytes: Long? = null,
-    @SerialName("content_type") val contentType: String? = null,
-    @SerialName("processing_status") val processingStatus: String? = null,
-    @SerialName("document_status") val documentStatus: String? = null,
-    val indexed: Boolean? = null,
-    @SerialName("created_at") val createdAt: String? = null,
-)
-
-/**
- * A search result from collection search.
+ * One matched chunk from `POST /qai/v1/rag/collections/search`.
  */
 @Serializable
 data class CollectionSearchResult(
+    /** The matched chunk text. */
     val content: String = "",
-    val score: Double? = null,
-    @SerialName("file_id") val fileId: String? = null,
-    @SerialName("collection_id") val collectionId: String? = null,
-    val metadata: kotlinx.serialization.json.JsonElement? = null,
+    /** Relevance score; results arrive highest first. */
+    val score: Double = 0.0,
+    /** Name of the collection the chunk came from. */
+    val collection: String = "",
+    /** ID of the collection the chunk came from. */
+    @SerialName("collection_id") val collectionId: String = "",
+    /** Provider-side ID of the document holding the chunk, when known. */
+    @SerialName("document_id") val documentId: String? = null,
+    /** Filename of the document holding the chunk, when known. */
+    val filename: String? = null,
+    /** True when the chunk came from a shared collection rather than one the caller owns. */
+    @SerialName("is_shared") val isShared: Boolean = false,
 )
 
 /**
- * Request body for collection search.
+ * Request body for `POST /qai/v1/rag/collections/search`.
  */
 @Serializable
 data class CollectionSearchRequest(
-    val query: String = "",
+    /** The search query. Required; the gateway answers 400 without it. */
+    val query: String,
+    /**
+     * Collections to search. Empty searches every collection the caller can
+     * read, their own and shared. IDs the caller cannot read are skipped.
+     */
     @SerialName("collection_ids") val collectionIds: List<String> = emptyList(),
-    val mode: String? = null,
-    @SerialName("max_results") val maxResults: Int? = null,
+    /** Maximum chunks to return across all collections. The gateway defaults to 10. */
+    @SerialName("max_chunks") val maxChunks: Int? = null,
 )
 
 /**
@@ -68,20 +67,16 @@ data class CollectionUploadResult(
 )
 
 // ── Internal wrapper types for API responses ────────────────────────
+// The gateway encodes an empty list as JSON null, so the lists are nullable.
 
 @Serializable
 internal data class CollectionsListResponse(
-    val collections: List<Collection> = emptyList(),
-)
-
-@Serializable
-internal data class CollectionDocumentsResponse(
-    val documents: List<CollectionDocument> = emptyList(),
+    val collections: List<Collection>? = null,
 )
 
 @Serializable
 internal data class CollectionSearchResponse(
-    val results: List<CollectionSearchResult> = emptyList(),
+    val results: List<CollectionSearchResult>? = null,
 )
 
 @Serializable

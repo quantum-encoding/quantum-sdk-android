@@ -12,10 +12,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.BufferedReader
 import java.io.IOException
@@ -139,73 +137,6 @@ fun QuantumClient.streamJob(jobId: String): Flow<JobStreamEvent> {
             response.close()
         }
     }.flowOn(Dispatchers.IO)
-}
-
-// ── Compute Billing ─────────────────────────────────────────────────────
-
-/**
- * Query compute billing from BigQuery via the QAI backend.
- *
- * @param request Billing query filters (instance ID, date range).
- * @return Billing entries and total cost.
- */
-suspend fun QuantumClient.computeBilling(request: BillingRequest): BillingResponse {
-    // Use the createJob path pattern — we need POST to /qai/v1/compute/billing.
-    // Since we can't access the private http field, we delegate through the public API.
-    // The public doJson method on the client's internal HttpClient is not exposed,
-    // so we construct a minimal request ourselves.
-    val client = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(60, TimeUnit.SECONDS)
-        .build()
-
-    val jsonBody = sseJson.encodeToString(BillingRequest.serializer(), request)
-
-    val httpRequest = Request.Builder()
-        .url("$baseUrl/qai/v1/compute/billing")
-        .header("Authorization", "Bearer $apiKey")
-        .header("Content-Type", "application/json")
-        .post(
-            jsonBody.toRequestBody("application/json; charset=utf-8".toMediaType())
-        )
-        .build()
-
-    val response = suspendCancellableCoroutine { continuation ->
-        val call = client.newCall(httpRequest)
-        continuation.invokeOnCancellation { call.cancel() }
-        call.enqueue(object : okhttp3.Callback {
-            override fun onFailure(call: okhttp3.Call, e: IOException) {
-                if (!continuation.isCompleted) {
-                    continuation.resumeWithException(
-                        QuantumNetworkException("Compute billing request failed: ${e.message}", e)
-                    )
-                }
-            }
-
-            override fun onResponse(call: okhttp3.Call, response: Response) {
-                if (!continuation.isCompleted) {
-                    continuation.resumeWith(Result.success(response))
-                }
-            }
-        })
-    }
-
-    if (!response.isSuccessful) {
-        val requestId = response.header("X-QAI-Request-Id") ?: ""
-        val body = response.body?.string() ?: ""
-        response.close()
-        throw QuantumApiException(
-            statusCode = response.code,
-            code = response.code.toString(),
-            message = body.ifEmpty { "Compute billing error (${response.code})" },
-            requestId = requestId,
-        )
-    }
-
-    val responseBody = response.body?.string() ?: throw QuantumNetworkException("Empty response body")
-    response.close()
-
-    return sseJson.decodeFromString<BillingResponse>(responseBody)
 }
 
 // ── Internal accessors for extension functions ──────────────────────────

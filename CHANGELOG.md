@@ -4,10 +4,18 @@ Releases before 0.3.0 were tracked in git history only; see `git log`.
 
 ## Unreleased
 
-The client drops every method whose gateway route was retired on 10 Nov 2026.
-Those routes now answer 404, so each removed method could only fail.
+Every path the client calls now matches a route the gateway serves. Methods
+whose route was retired on 10 Nov 2026, or never existed, are gone: each one
+could only get a 404. Collection search now reaches its real route and speaks
+its wire format.
 
 ### Removed (breaking)
+- `collectionsDocuments` and its type `CollectionDocument`. It called
+  `GET /qai/v1/rag/collections/{id}/documents`, a route the gateway has never
+  served.
+- `computeBilling` (extension function) and its types `BillingRequest`,
+  `BillingEntry`, `BillingResponse`. It called `POST /qai/v1/compute/billing`,
+  a route the gateway has never served.
 - `extractDocument`, `chunkDocument`, `processDocument`
   (`POST /qai/v1/documents/extract`, `/chunk`, `/process`) and their types:
   `DocumentRequest`, `DocumentResponse`, `ChunkRequest`, `ChunkResponse`,
@@ -30,6 +38,23 @@ Those routes now answer 404, so each removed method could only fail.
 `videoPhotoAvatar` stays: `PhotoAvatarRequest` is the talking-photo body
 (`photo_base64` + `script`), the one shape `POST /qai/v1/video/photo-avatar`
 still accepts.
+
+### Fixed (breaking)
+- `collectionsSearch` posted to `/qai/v1/rag/search/collections`, which
+  answers 404. It now posts to `POST /qai/v1/rag/collections/search`.
+- `CollectionSearchRequest` matches what that handler reads: `query`
+  (now required), `collectionIds` (`collection_ids`; empty searches every
+  collection the caller can read) and `maxChunks` (`max_chunks`, the gateway
+  defaults to 10). `maxResults` serialised as `max_results`, which the
+  gateway ignores, and is replaced by `maxChunks`. `mode` is removed: the
+  gateway has no search modes and ignored it.
+- `CollectionSearchResult` matches what the handler sends: `content`,
+  `score`, `collection` (name), `collectionId`, `documentId`, `filename` and
+  `isShared`. `fileId` and `metadata` are removed; the gateway never sent
+  either.
+- `collectionsList` and `collectionsSearch` threw a decoding error when there
+  was nothing to return, because the gateway encodes an empty list as JSON
+  `null`. Both now return an empty list.
 
 ### Docs
 - README endpoint table drops the Documents, Batch and Scanner rows and the

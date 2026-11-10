@@ -645,7 +645,7 @@ class QuantumClient(
      */
     suspend fun collectionsList(): List<Collection> {
         val (data, _) = http.doJson<CollectionsListResponse>("GET", "/qai/v1/rag/collections")
-        return data.collections
+        return data.collections.orEmpty()
     }
 
     /**
@@ -679,18 +679,6 @@ class QuantumClient(
     }
 
     /**
-     * List documents in a collection.
-     *
-     * @param collectionId Collection ID to list documents for.
-     */
-    suspend fun collectionsDocuments(collectionId: String): List<CollectionDocument> {
-        val (data, _) = http.doJson<CollectionDocumentsResponse>(
-            "GET", "/qai/v1/rag/collections/$collectionId/documents"
-        )
-        return data.documents
-    }
-
-    /**
      * Upload a file to a collection. The server handles the two-step
      * xAI upload (files API + management API) with the master key.
      *
@@ -712,15 +700,19 @@ class QuantumClient(
     }
 
     /**
-     * Search across collections (user's + shared) with hybrid/semantic/keyword mode.
+     * Search the caller's collections and the shared ones. Results from every
+     * collection searched are merged, highest score first, and capped at
+     * [CollectionSearchRequest.maxChunks] in total.
      *
-     * @param request Search request with query and collection IDs.
+     * @param request Search request with the query and, optionally, the
+     *   collection IDs to restrict it to.
+     * @return Matched chunks; empty when nothing matched.
      */
     suspend fun collectionsSearch(request: CollectionSearchRequest): List<CollectionSearchResult> {
         val (data, _) = http.doJson<CollectionSearchResponse>(
-            "POST", "/qai/v1/rag/search/collections", request
+            "POST", "/qai/v1/rag/collections/search", request
         )
-        return data.results
+        return data.results.orEmpty()
     }
 
     // ── Models ────────────────────────────────────────────────────────
