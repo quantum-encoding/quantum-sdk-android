@@ -135,57 +135,6 @@ data class SearchContextResponse(
     val query: String = "",
 )
 
-// ── Search Answer (grounded AI answer) ──────────────────────────────
-
-/**
- * A chat message for the search answer endpoint.
- */
-@Serializable
-data class SearchAnswerMessage(
-    val role: String = "",
-    val content: String = "",
-)
-
-/**
- * Request body for search answer.
- */
-@Serializable
-data class SearchAnswerRequest(
-    val messages: List<SearchAnswerMessage> = emptyList(),
-    val model: String? = null,
-)
-
-/**
- * A citation reference in a search answer.
- */
-@Serializable
-data class SearchAnswerCitation(
-    val url: String = "",
-    val title: String = "",
-    val snippet: String? = null,
-)
-
-/**
- * A choice in the search answer response.
- */
-@Serializable
-data class SearchAnswerChoice(
-    val index: Int = 0,
-    val message: SearchAnswerMessage = SearchAnswerMessage(),
-    @SerialName("finish_reason") val finishReason: String? = null,
-)
-
-/**
- * Response from the search answer endpoint.
- */
-@Serializable
-data class SearchAnswerResponse(
-    val choices: List<SearchAnswerChoice> = emptyList(),
-    val model: String = "",
-    val id: String = "",
-    val citations: List<SearchAnswerCitation> = emptyList(),
-)
-
 typealias Infobox = InfoboxResult
 typealias Discussion = DiscussionResult
 
@@ -213,15 +162,6 @@ data class ContextOptions(
     val country: String? = null,
     val language: String? = null,
     val freshness: String? = null,
-)
-
-/**
- * A message in a search-answer conversation.
- */
-@Serializable
-data class SearchMessage(
-    val role: String = "",
-    val content: String = "",
 )
 
 // ── LLM Context ─────────────────────────────────────────────────────

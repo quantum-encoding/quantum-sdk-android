@@ -2,6 +2,39 @@
 
 Releases before 0.3.0 were tracked in git history only; see `git log`.
 
+## Unreleased
+
+The client drops every method whose gateway route was retired on 10 Nov 2026.
+Those routes now answer 404, so each removed method could only fail.
+
+### Removed (breaking)
+- `extractDocument`, `chunkDocument`, `processDocument`
+  (`POST /qai/v1/documents/extract`, `/chunk`, `/process`) and their types:
+  `DocumentRequest`, `DocumentResponse`, `ChunkRequest`, `ChunkResponse`,
+  `DocumentChunk`, `ProcessRequest`, `ProcessResponse`, and the aliases
+  `ChunkDocumentRequest`, `ChunkDocumentResponse`, `ProcessDocumentRequest`,
+  `ProcessDocumentResponse`.
+- `batchSubmit`, `batchSubmitJsonl`, `batchJobs`, `batchJob`
+  (`POST /qai/v1/batch`, `POST /qai/v1/batch/jsonl`, `GET /qai/v1/batch/jobs`,
+  `GET /qai/v1/batch/jobs/{id}`) and their types: `BatchJob`, `BatchJobInput`,
+  `BatchSubmitRequest`, `BatchSubmitResponse`, `BatchJsonlResponse`,
+  `BatchJobInfo`, `BatchJobsResponse`. HeyGen video batching
+  (`videoBatchSubmit`, `videoBatchStatus`) is a separate route and stays.
+- `searchAnswer` (`POST /qai/v1/search/answer`) and its types:
+  `SearchAnswerRequest`, `SearchAnswerResponse`, `SearchAnswerMessage`,
+  `SearchAnswerChoice`, `SearchAnswerCitation`, plus the unused
+  `SearchMessage`. `webSearch` and `searchContext` stay.
+- `videoStudio` (`POST /qai/v1/video/studio`) and its types:
+  `VideoStudioRequest`, `StudioVideoRequest`, `StudioClip`.
+
+`videoPhotoAvatar` stays: `PhotoAvatarRequest` is the talking-photo body
+(`photo_base64` + `script`), the one shape `POST /qai/v1/video/photo-avatar`
+still accepts.
+
+### Docs
+- README endpoint table drops the Documents, Batch and Scanner rows and the
+  search-answer and studio mentions. This SDK never shipped scanner methods.
+
 ## 0.4.0
 
 The TTS request catches up with the gateway: a house voice you do not have to

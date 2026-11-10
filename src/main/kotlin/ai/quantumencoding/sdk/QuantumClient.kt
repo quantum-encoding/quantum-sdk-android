@@ -402,14 +402,6 @@ class QuantumClient(
     }
 
     /**
-     * Create a talking-head video via HeyGen Studio. Returns an async job.
-     */
-    suspend fun videoStudio(request: VideoStudioRequest): AsyncJobResponse {
-        val (data, _) = http.doJson<AsyncJobResponse>("POST", "/qai/v1/video/studio", request)
-        return data
-    }
-
-    /**
      * Submit a video translation job via HeyGen. Returns an async job.
      */
     suspend fun videoTranslate(request: VideoTranslateRequest): AsyncJobResponse {
@@ -597,44 +589,6 @@ class QuantumClient(
      */
     suspend fun embed(request: EmbedRequest): EmbedResponse {
         val (data, meta) = http.doJson<EmbedResponse>("POST", "/qai/v1/embeddings", request)
-        return data.let {
-            if (it.costTicks == 0L && meta.costTicks > 0) it.copy(costTicks = meta.costTicks) else it
-        }.let {
-            if (it.requestId.isEmpty()) it.copy(requestId = meta.requestId) else it
-        }
-    }
-
-    // ── Documents ────────────────────────────────────────────────────
-
-    /**
-     * Extract text content from a document (PDF, image, etc.).
-     */
-    suspend fun extractDocument(request: DocumentRequest): DocumentResponse {
-        val (data, meta) = http.doJson<DocumentResponse>("POST", "/qai/v1/documents/extract", request)
-        return data.let {
-            if (it.costTicks == 0L && meta.costTicks > 0) it.copy(costTicks = meta.costTicks) else it
-        }.let {
-            if (it.requestId.isEmpty()) it.copy(requestId = meta.requestId) else it
-        }
-    }
-
-    /**
-     * Chunk a document into smaller pieces for embedding or processing.
-     */
-    suspend fun chunkDocument(request: ChunkDocumentRequest): ChunkDocumentResponse {
-        val (data, meta) = http.doJson<ChunkDocumentResponse>("POST", "/qai/v1/documents/chunk", request)
-        return data.let {
-            if (it.costTicks == 0L && meta.costTicks > 0) it.copy(costTicks = meta.costTicks) else it
-        }.let {
-            if (it.requestId.isEmpty()) it.copy(requestId = meta.requestId) else it
-        }
-    }
-
-    /**
-     * Process a document with extraction + optional instructions.
-     */
-    suspend fun processDocument(request: ProcessDocumentRequest): ProcessDocumentResponse {
-        val (data, meta) = http.doJson<ProcessDocumentResponse>("POST", "/qai/v1/documents/process", request)
         return data.let {
             if (it.costTicks == 0L && meta.costTicks > 0) it.copy(costTicks = meta.costTicks) else it
         }.let {
@@ -1088,42 +1042,6 @@ class QuantumClient(
         return data.ephemeralToken
     }
 
-    // ── Batch Processing ─────────────────────────────────────────────
-
-    /**
-     * Submit a batch of jobs for processing.
-     */
-    suspend fun batchSubmit(request: BatchSubmitRequest): BatchSubmitResponse {
-        val (data, _) = http.doJson<BatchSubmitResponse>("POST", "/qai/v1/batch", request)
-        return data
-    }
-
-    /**
-     * Submit a batch of jobs using JSONL format.
-     *
-     * @param jsonl JSONL string with one job per line.
-     */
-    suspend fun batchSubmitJsonl(jsonl: String): BatchJsonlResponse {
-        val (data, _) = http.doJson<BatchJsonlResponse>("POST", "/qai/v1/batch/jsonl", mapOf("jsonl" to jsonl))
-        return data
-    }
-
-    /**
-     * List all batch jobs for the account.
-     */
-    suspend fun batchJobs(): BatchJobsResponse {
-        val (data, _) = http.doJson<BatchJobsResponse>("GET", "/qai/v1/batch/jobs")
-        return data
-    }
-
-    /**
-     * Get the status and result of a single batch job.
-     */
-    suspend fun batchJob(id: String): BatchJobInfo {
-        val (data, _) = http.doJson<BatchJobInfo>("GET", "/qai/v1/batch/jobs/$id")
-        return data
-    }
-
     // ── Credits ──────────────────────────────────────────────────────
 
     /**
@@ -1177,12 +1095,6 @@ class QuantumClient(
     /** Fetch LLM-optimized content chunks for grounding. */
     suspend fun searchContext(request: SearchContextRequest): SearchContextResponse {
         val (data, _) = http.doJson<SearchContextResponse>("POST", "/qai/v1/search/context", request)
-        return data
-    }
-
-    /** Get a grounded AI answer with citations. */
-    suspend fun searchAnswer(request: SearchAnswerRequest): SearchAnswerResponse {
-        val (data, _) = http.doJson<SearchAnswerResponse>("POST", "/qai/v1/search/answer", request)
         return data
     }
 

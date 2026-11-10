@@ -52,30 +52,6 @@ data class JobResponse(
     @SerialName("cost_ticks") val costTicks: Long = 0,
 )
 
-// ── HeyGen Studio ────────────────────────────────────────────────────
-
-/**
- * A clip in a studio video.
- */
-@Serializable
-data class StudioClip(
-    @SerialName("avatar_id") val avatarId: String? = null,
-    @SerialName("voice_id") val voiceId: String? = null,
-    val script: String? = null,
-    val background: JsonElement? = null,
-)
-
-/**
- * Request body for HeyGen studio video creation.
- */
-@Serializable
-data class StudioVideoRequest(
-    val title: String? = null,
-    val clips: List<StudioClip> = emptyList(),
-    val dimension: String? = null,
-    @SerialName("aspect_ratio") val aspectRatio: String? = null,
-)
-
 // ── HeyGen Translate ─────────────────────────────────────────────────
 
 /**
@@ -178,7 +154,6 @@ data class HeyGenVoicesResponse(
     val voices: List<HeyGenVoice> = emptyList(),
 )
 
-typealias VideoStudioRequest = StudioVideoRequest
 typealias VideoTranslateRequest = TranslateRequest
 
 // ── HeyGen typed responses (with request_id) ────────────────────────
